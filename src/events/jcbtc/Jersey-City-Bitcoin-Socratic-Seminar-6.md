@@ -5,7 +5,7 @@ title: "JC Bitcoin Socratic Seminar #6"
 type: jcbtc-socratic
 date: 2026-04-16
 tags: [event]
-meetup: https://luma.com/axva8t9n?tk=Doqx7o
+meetup: https://luma.com/user/usr-Mu6rRjVWwUw3XVK
 ---
 
 ## About Event
@@ -26,7 +26,7 @@ In this classroom style event we will discuss some relevant bitcoin news and how
 
 This meetup is designed for bitcoin beginners so don't be shy and please bring your questions!
 
-Reserve your seat on <a href="https://luma.com/axva8t9n?tk=Doqx7o" target="_blank">Luma</a>.
+Reserve your seat on <a href="https://luma.com/user/usr-Mu6rRjVWwUw3XVK" target="_blank">Luma</a>.
 
 ## Location
 
