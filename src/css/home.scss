@@ -1,69 +1,314 @@
-// Typography
-$body-font: 'Source Code Pro', monospace;
-$base-font-size: 16px;
+@import 'tokens';
 
-// Colors
-$primary-color: #FF9900;
-$background-color: #FFF;
-$font-color: #333;
+// ---- HERO POSTER ----
+.Hero {
+  padding: 72px 32px 56px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  background: radial-gradient(ellipse at 50% 0%, rgba(255, 153, 0, 0.05) 0%, transparent 62%);
 
-// Screen size for responsiveness
-$small-screen: 400px;
-$mid-screen: 768px;
-$large-screen: 1024px;
-
-
-.Home {
-  &-about {
-    font-size: 1.2rem;
+  @media (max-width: $mid-screen) {
+    padding: 48px 20px 40px;
   }
 
-  &-posts {
-    margin-bottom: 4rem;
+  &-inner {
+    max-width: $content-width;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+  }
 
-    &:last-child {
-      margin-bottom: 0;
-    }
+  &-location {
+    font-family: $font-display;
+    font-size: 12px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 6px;
+    color: $muted;
+    margin-bottom: 20px;
+  }
 
-    &-subtitle {
-      margin-top: 2rem;
-    }
+  &-title {
+    font-family: $font-display;
+    font-weight: 700;
+    text-transform: uppercase;
+    line-height: 0.88;
+    letter-spacing: -2px;
+    margin: 0;
 
-    &-title {
-      font-size: 1.5rem;
-      margin-bottom: 1rem;
-      font-weight: bold;
-    }
+    &-line {
+      display: block;
+      font-size: clamp(58px, 14vw, 158px);
+      color: $cream;
 
-    &-post {
-      font-size: 1.2rem;
-      margin-bottom: 0.25rem;
-
-      &-date {
-        opacity: 0.8;
+      &.accent {
+        color: $accent;
+        font-size: clamp(66px, 16vw, 178px);
       }
+    }
+  }
 
-      &-arrow {
-        opacity: 0.5;
-      }
+  &-tagline {
+    font-family: $font-body;
+    font-size: 16px;
+    color: $muted;
+    margin: 30px auto 0;
+    max-width: 620px;
+    letter-spacing: 0.3px;
+  }
+
+  &-details {
+    margin-top: 38px;
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    flex-wrap: wrap;
+
+    @media (max-width: $mid-screen) {
+      gap: 24px;
+    }
+  }
+
+  &-detail {
+    text-align: center;
+
+    &-label {
+      display: block;
+      font-family: $font-display;
+      font-size: 10px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      color: $muted-2;
+      margin-bottom: 4px;
+    }
+
+    &-value {
+      display: block;
+      font-family: $font-display;
+      font-size: 22px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: $cream;
+    }
+  }
+
+  &-stamp {
+    display: inline-block;
+    border: 3px solid $accent;
+    padding: 8px 28px;
+    margin-top: 38px;
+    transform: rotate(-2deg);
+
+    span {
+      font-family: $font-display;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 4px;
+      color: $accent;
     }
   }
 }
 
-// Scroll Bar
-::-webkit-scrollbar-track
-{
-	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
-	background-color: #F5F5F5;
+// ---- CONTENT SECTIONS ----
+.Section {
+  max-width: $content-width;
+  margin: 0 auto;
+  padding: 20px 32px;
+
+  @media (max-width: $mid-screen) {
+    padding: 16px 20px;
+  }
+
+  &:first-of-type {
+    padding-top: 40px;
+  }
+
+  &-header {
+    font-family: $font-display;
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 4px;
+    color: $muted;
+    margin: 32px 0 20px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid $border;
+  }
+
+  &-more {
+    font-family: $font-display;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-top: 16px;
+  }
 }
 
-::-webkit-scrollbar
-{
-	width: 6px;
-	background-color: #F5F5F5;
+.Home-about {
+  font-size: 1.15rem;
+  line-height: 1.7;
+  color: $cream;
+  max-width: 760px;
 }
 
-::-webkit-scrollbar-thumb
-{
-	background-color: #f7931a;
+// ---- EVENT / BLOG POSTER CARDS ----
+.Posters {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.Poster {
+  display: grid;
+  grid-template-columns: 150px 1fr auto;
+  gap: 28px;
+  align-items: center;
+  background: $surface;
+  border: 1px solid $border;
+  padding: 28px 32px;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.2s ease, border-color 0.2s ease;
+  color: $cream;
+
+  &::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 5px;
+    background: $accent;
+  }
+
+  &:hover {
+    transform: translateX(4px);
+    border-color: $muted-3;
+    color: $cream;
+  }
+
+  &-date {
+    font-family: $font-display;
+    font-size: 18px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: $accent;
+    line-height: 1.15;
+  }
+
+  &-info {
+    min-width: 0;
+  }
+
+  &-type {
+    display: block;
+    font-family: $font-display;
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: $muted;
+    margin-bottom: 6px;
+  }
+
+  &-title {
+    display: block;
+    font-family: $font-display;
+    font-size: clamp(20px, 2.4vw, 28px);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: $cream;
+    line-height: 1.08;
+  }
+
+  &-cta {
+    font-family: $font-display;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: $accent;
+    border: 2px solid $accent;
+    padding: 10px 22px;
+    white-space: nowrap;
+    transition: background 0.15s ease, color 0.15s ease;
+  }
+
+  &:hover &-cta {
+    background: $accent;
+    color: $bg;
+  }
+
+  // Past events (JS adds .past-event to the date span)
+  .past-event {
+    opacity: 0.5;
+  }
+
+  @media (max-width: $mid-screen) {
+    grid-template-columns: 1fr;
+    gap: 12px;
+    padding: 22px 24px;
+
+    &-cta {
+      justify-self: start;
+    }
+  }
+}
+
+// ---- CTA BAND ----
+.CTA {
+  text-align: center;
+  padding: 80px 32px;
+  margin-top: 40px;
+  border-top: 3px solid $accent;
+  background: radial-gradient(ellipse at 50% 100%, rgba(255, 153, 0, 0.05) 0%, transparent 62%);
+
+  @media (max-width: $mid-screen) {
+    padding: 56px 20px;
+  }
+
+  &-title {
+    font-family: $font-display;
+    font-size: clamp(36px, 6vw, 64px);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    line-height: 1;
+    color: $cream;
+    margin: 0 0 14px;
+
+    span { color: $accent; }
+  }
+
+  &-sub {
+    font-family: $font-mono;
+    font-size: 13px;
+    letter-spacing: 1px;
+    color: $muted-2;
+    margin-bottom: 30px;
+  }
+
+  &-btn {
+    display: inline-block;
+    font-family: $font-display;
+    font-size: 14px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    color: $bg;
+    background: $accent;
+    padding: 16px 40px;
+    transition: background 0.15s ease, color 0.15s ease;
+
+    &:hover {
+      background: $cream;
+      color: $bg;
+    }
+  }
 }

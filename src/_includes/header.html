@@ -1,23 +1,16 @@
 {% set navPages = collections.all | eleventyNavigation %}
 <header class="Header">
-  <div class="Header-inner">
-    <div class="Header-logo">
-      <img src="/assets/images/JCBTC.png" alt="{{ client.title }}"/>
-      <span class="long-title"><a href="/">{{ client.title }}</a></span>
-      <span class="short-title"><a href="/">JC BTC</a></span>
-    </div>
-    <nav class="Header-nav">
+  <nav class="Nav" aria-label="Primary">
+    <a class="Nav-stamp" href="/" aria-label="{{ client.title }} home">JC BTC</a>
+    <div class="Nav-links">
       {%- for entry in navPages %}
       <a {% if entry.url==page.url %} class="active-menu" {% endif %} href='{{ entry.url }}'>{{
         entry.title }}</a>
       {# Add static link after the third item (index 1) #}
       {% if loop.index == navPages.length - 1 %}
-      <a href="{{client.meetup}}" target="_blank">Meetup</a>
+      <a href="{{client.meetup}}" target="_blank" rel="noopener">Meetup</a>
       {% endif %}
       {% endfor %}
-    </nav>
-  </div>
-  <div class="Header-border">
-    ==============================================================================================================================================================
-  </div>
+    </div>
+  </nav>
 </header>

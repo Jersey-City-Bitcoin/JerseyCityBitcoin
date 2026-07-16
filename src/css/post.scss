@@ -1,47 +1,125 @@
-// Typography
-$body-font: 'Source Code Pro', monospace;
-$base-font-size: 16px;
-
-// Colors
-$primary-color: #FF9900;
-$background-color: #FFF;
-$font-color: #333;
-
-// Screen size for responsiveness
-$small-screen: 400px;
-$mid-screen: 768px;
-$large-screen: 1024px;
-
+@import 'tokens';
 
 .Post {
   word-wrap: break-word;
 
   &-title {
-    margin: 0 0 0.25rem 0;
-    font-size: 1.8rem;
+    font-family: $font-display;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    line-height: 1.05;
+    color: $cream;
+    margin: 0 0 0.5rem 0;
+    font-size: clamp(28px, 5vw, 46px);
   }
 
   &-info {
     display: flex;
+    flex-wrap: wrap;
+    font-family: $font-mono;
     font-size: 0.8rem;
-    opacity: 0.7;
-    margin-bottom: 2rem;
+    letter-spacing: 0.5px;
+    color: $muted;
+    margin-bottom: 2.5rem;
 
     > * {
       &:after {
-        content: '·';
+        content: '\00B7';
         margin: 0 0.5rem;
-        opacity: 0.5;
+        color: $muted-3;
       }
 
       &:last-child:after {
         display: none;
       }
     }
+
+    a { color: $accent; }
   }
 }
-//   Bitcoin Emojis
- .bitcoinEmoji {
+
+// Shared long-form content typography (posts, blog posts, and static pages)
+.Post-content,
+.page-content,
+.Blog {
+  color: $cream;
+
+  a {
+    color: $accent;
+    text-decoration: underline;
+    text-decoration-color: rgba(255, 153, 0, 0.45);
+    text-underline-offset: 3px;
+
+    &:hover { text-decoration-color: $accent; }
+  }
+
+  p { margin-bottom: 1.15rem; line-height: 1.7; }
+
+  blockquote {
+    border-left: 4px solid $accent;
+    background: $surface;
+    padding: 14px 20px;
+    margin: 1.5rem 0;
+    color: $muted;
+    font-style: italic;
+  }
+
+  code {
+    font-family: $font-mono;
+    font-size: 0.85em;
+    background: $surface;
+    border: 1px solid $border;
+    border-radius: 3px;
+    padding: 1px 6px;
+    color: $cream;
+  }
+
+  pre {
+    background: $surface;
+    border: 1px solid $border;
+    border-radius: 4px;
+    padding: 16px 18px;
+    overflow-x: auto;
+    margin: 1.5rem 0;
+
+    code {
+      background: none;
+      border: 0;
+      padding: 0;
+    }
+  }
+
+  img {
+    border: 1px solid $border;
+    border-radius: 4px;
+  }
+
+  table {
+    width: 100%;
+    margin: 1.5rem 0;
+    border: 1px solid $border;
+    display: block;
+    overflow-x: auto;
+
+    th, td {
+      border: 1px solid $border;
+      padding: 8px 12px;
+      text-align: left;
+    }
+
+    th {
+      font-family: $font-display;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: $accent;
+      background: $surface;
+    }
+  }
+}
+
+// Bitcoin emoji inline glyphs
+.bitcoinEmoji {
   -webkit-text-size-adjust: 100%;
   pointer-events: auto;
   font: inherit;

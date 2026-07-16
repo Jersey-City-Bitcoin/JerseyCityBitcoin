@@ -1,49 +1,34 @@
-// Typography
-$body-font: 'Source Code Pro', monospace;
-$base-font-size: 16px;
-
-// Colors
-$primary-color: #FF9900;
-$background-color: #FFF;
-$font-color: #333;
-
-// Screen size for responsiveness
-$small-screen: 400px;
-$mid-screen: 768px;
-$large-screen: 1024px;
+@import 'tokens';
 
 html, body {
-  font-family: $body-font;
-  font-size: 16px;
-  line-height: 1.5;
-  background-color: $background-color;
-  color: $font-color;
+  font-family: $font-body;
+  font-size: $base-font-size;
+  font-weight: 400;
+  line-height: 1.6;
+  background-color: $bg;
+  color: $cream;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 
-  @media (max-width: $large-screen) {
-    font-size: 14px;
-  }
-
-  @media (max-width: $mid-screen) {
-    font-size: 13px;
-  }
-
-  @media (max-width: $small-screen) {
-    font-size: 12px;
-  }
+  @media (max-width: $large-screen) { font-size: 15.5px; }
+  @media (max-width: $mid-screen) { font-size: 15px; }
+  @media (max-width: $small-screen) { font-size: 14px; }
 }
 
+// Full-bleed shell. Individual content containers set their own reading width.
 .Site {
-  max-width: 880px;
-  margin: 0 auto;
-  padding: 2rem;
+  width: 100%;
+  margin: 0;
+  padding: 0;
 }
 
 a {
-  color: $primary-color;
+  color: $accent;
   text-decoration: none;
+  transition: color 0.15s ease;
 
   &:hover {
-    color: rgba($primary-color, 0.8);
+    color: lighten($accent, 12%);
   }
 }
 
@@ -51,38 +36,41 @@ p {
   margin-bottom: 1rem;
 }
 
-h1, h2, h3 {
-  font-weight: bold;
+h1, h2, h3, h4, h5, h6 {
+  font-family: $font-display;
+  font-weight: 700;
+  color: $cream;
+  line-height: 1.12;
+  letter-spacing: 0.4px;
 }
 
-h4, h5, h6 {
-  font-weight: bolder;
+h1 { font-size: 2rem; margin: 2rem 0 1.25rem; }
+h2 { font-size: 1.6rem; margin: 1.75rem 0 1rem; }
+h3 { font-size: 1.35rem; margin: 1.5rem 0 0.75rem; }
+h4 { font-size: 1.15rem; margin: 1rem 0 0.5rem; }
+h5, h6 { font-size: 1rem; margin: 1rem 0 0.5rem; }
+
+strong { font-weight: 600; color: $cream; }
+em { font-style: italic; }
+
+img { max-width: 100%; height: auto; }
+
+hr {
+  border: 0;
+  border-top: 1px solid $border;
+  margin: 2rem 0;
 }
 
-h1 {
-  font-size: 1.6rem;
-  margin-top: 3rem;
-  margin-bottom: 1.5rem;
-}
-
-h2 {
-  font-size: 1.5rem;
-  margin-top: 1rem;
-  margin-bottom: 1rem;
-}
-
-h3 {
-  font-size: 1.4rem;
-  margin-top: 1rem;
-  margin-bottom: 1rem;
-}
-
-h4 {
-  font-size: 1.2rem;
-  margin-top: 0.5rem;
-  margin-bottom: 0.5rem;
+// Readable content containers shared by page / post / blog layouts.
+.page-content,
+.Post,
+.Blog {
+  max-width: $reading-width;
+  margin: 0 auto;
+  padding: 56px 24px 88px;
 }
 
 .past-event {
   text-decoration: line-through;
+  opacity: 0.5;
 }

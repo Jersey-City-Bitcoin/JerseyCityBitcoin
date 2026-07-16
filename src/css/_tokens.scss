@@ -1,0 +1,26 @@
+// Beer-garden design tokens (mockup 05 — beer hall poster)
+// Shared palette, fonts, and breakpoints for every SCSS entry point.
+
+// Palette
+$bg: #13120e; // page background
+$surface: #1a1810; // card / panel surface
+$border: #2a2520; // hairline border
+$cream: #f5f0e6; // primary text
+$muted: #8b7355; // secondary text (brown)
+$muted-2: #665a42; // tertiary text (brown)
+$muted-3: #555040; // faint text (brown)
+$accent: #ff9900; // Bitcoin orange
+
+// Typography
+$font-display: 'Oswald', system-ui, sans-serif; // condensed uppercase display
+$font-body: 'Inter', system-ui, sans-serif; // body copy
+$font-mono: 'JetBrains Mono', monospace; // small mono accents
+
+$base-font-size: 16px;
+
+// Breakpoints
+$small-screen: 400px;
+$mid-screen: 768px;
+$large-screen: 1024px;
+$content-width: 1100px;
+$reading-width: 780px;
