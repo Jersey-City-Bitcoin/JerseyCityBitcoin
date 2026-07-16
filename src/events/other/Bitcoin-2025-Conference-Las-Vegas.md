@@ -7,7 +7,7 @@ date: 2025-05-27
 type: [other]
 tags: [event]
 ---
-Join the world's largest Bitcoin event—Bitcoin 2025, May 27-29 in Las Vegas.
+Join the world's largest Bitcoin event: Bitcoin 2025, May 27-29 in Las Vegas.
 
 <p></p>
 

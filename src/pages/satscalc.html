@@ -242,6 +242,83 @@ input:focus {
     outline: none; /* Remove default blue border */
     border: 3px solid #FF9900 !important; /* Customize the border color and width as needed */
 }
+
+.Calculator-page .converter-wrapper {
+    max-width: 600px;
+    padding: 32px;
+    border: 1px solid #2a2520;
+    border-radius: 0;
+    background: #1a1810;
+}
+
+.Calculator-page .converter-wrapper h2 {
+    margin: 0 0 12px;
+    color: #f5f0e6;
+    font-family: 'Oswald', system-ui, sans-serif;
+    font-size: 34px;
+    line-height: 1;
+    text-transform: uppercase;
+}
+
+.Calculator-page #price {
+    min-height: 26px;
+    margin-bottom: 14px;
+    color: #a08862;
+}
+
+.Calculator-page .converter-wrapper button {
+    border: 1px solid #ff9900;
+    border-radius: 0;
+    background: transparent;
+    color: #ff9900;
+    cursor: pointer;
+    font-family: 'Oswald', system-ui, sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    padding: 7px 12px;
+}
+
+.Calculator-page .converter-wrapper button:hover,
+.Calculator-page .converter-wrapper button:focus-visible {
+    background: #ff9900;
+    color: #13120e;
+}
+
+.Calculator-page .input-wrapper,
+.Calculator-page .input-inner {
+    border-radius: 0;
+}
+
+.Calculator-page .input-wrapper {
+    border-color: #3a332a;
+}
+
+.Calculator-page .input-inner {
+    background: #13120e;
+    color: #f5f0e6;
+}
+
+.Calculator-page .input-label,
+.Calculator-page .currency-name-short {
+    color: #a08862;
+}
+
+.Calculator-page .currency-name-long,
+.Calculator-page #bts-conv input[type="text"] {
+    color: #f5f0e6;
+}
+
+.Calculator-source {
+    margin: 24px 0 0;
+    text-align: center;
+}
+
+@media(max-width: 600px) {
+    .Calculator-page .converter-wrapper {
+        padding: 24px 16px;
+    }
+}
 </style>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script type="text/javascript">
@@ -426,9 +503,14 @@ input:focus {
     });
   });
 </script>
+<div class="Page Calculator-page">
+  <header class="Page-header">
+    <h1 class="Page-title">Bitcoin Price Calculator</h1>
+  </header>
+
 <div class="converter-wrapper">
   <div>
-    <h1>Bitcoin Price</h1>
+    <h2>Bitcoin Price</h2>
     <div id="price"></div>
     <button id="usd-btn">USD</button>
     <button id="eur-btn">EUR</button>
@@ -517,6 +599,7 @@ input:focus {
     </div>
   </div>
 </div>
-<div style="text-align: center; margin-top: 20px;">
+<div class="Calculator-source">
   <a href="https://github.com/JamesTsetsekas/satscalc" target="_blank">View Source Code on GitHub</a>
+</div>
 </div>

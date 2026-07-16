@@ -9,17 +9,27 @@ eleventyNavigation:
     order: 400
 ---
 
-<div class="Home">
-  <div class="Home-posts">
-    <h2 class="Home-posts-title">Blog Posts</h2>
-    {% for post in collections.blog %}
+<div class="Page">
+  <header class="Page-header">
+    <h1 class="Page-title">Blog</h1>
+    <p class="Page-intro">Updates, guides, and notes from the Jersey City Bitcoin community.</p>
+  </header>
+
+  <section class="Page-section" aria-labelledby="blog-posts">
+    <h2 class="Page-section-title" id="blog-posts">Blog Posts</h2>
+    <div class="Posters">
+    {% for post in collections.blog | reverse %}
     {% if post.data.published != false %}
-    <div class="Home-posts-post">
-      <span class="blog-post-date">{{ post.data.date | customDate }}</span>
-      <span class="Home-posts-post-arrow">&raquo;</span>
-      <a class="Home-posts-post-title" href="{{ post.url }}">{{ post.data.title }}</a>
-    </div>
+      <a class="Poster" href="{{ post.url }}">
+        <span class="Poster-date">{{ post.data.date | customDate }}</span>
+        <span class="Poster-info">
+          <span class="Poster-type">Blog Post</span>
+          <span class="Poster-title">{{ post.data.title }}</span>
+        </span>
+        <span class="Poster-cta">Read &rarr;</span>
+      </a>
     {% endif %}
     {% endfor %}
-  </div>
+    </div>
+  </section>
 </div>
