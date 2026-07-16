@@ -1,15 +1,17 @@
 ---
-layout: 'default.html'
-description: 'Cities'
-metaTitle: 'Cities'
-title: Blog Posts
+layout: 'page.html'
+description: 'Bitcoin Communities'
+metaTitle: 'Bitcoin Communities'
+title: Bitcoin Communities
 permalink: 'cities/'
 eleventyNavigation:
 key: Cities
 order: 600
 ---
 
-As Bitcoin has grown, so too have the local communities of like minded enthusiasts who wish to learn from one another and connect on a deeper level. Each of these communities is unique in its own way, composed of individuals from all walks of life with different ideas about what Bitcoin is and what it is not. What it can do, and what it cannot. But no matter from what lense you view Bitcoin, you cannot escape certain shared beliefs, because without them Bitcoin would not exist. One most critical is that of open source software development––"standing on the shoulder's of giants"––a principle that enables the seemingly endless chain of novel insights from which Bitcoin and its future improvements are built.
+# Bitcoin Communities
+
+As Bitcoin has grown, so too have the local communities of like minded enthusiasts who wish to learn from one another and connect on a deeper level. Each of these communities is unique in its own way, composed of individuals from all walks of life with different ideas about what Bitcoin is and what it is not. What it can do, and what it cannot. But no matter from what lens you view Bitcoin, you cannot escape certain shared beliefs, because without them Bitcoin would not exist. One of the most critical is open source software development, or "standing on the shoulders of giants," a principle that enables the seemingly endless chain of novel insights from which Bitcoin and its future improvements are built.
 
 Inspired by this very ethos, the BitDevs NYC community fostered an in-person environment where technically focused dialogue could be used as a way of testing ideas, just in the same way software protocols are challenged in open networks. Instead of organizing meetups exclusively around presentations and lectures, events were styled as Socratic Seminars, such that open discourse underpinned each event, inviting a collaborative spirit that reflected the base principles of the Bitcoin protocol and cypherpunk spirit.
 

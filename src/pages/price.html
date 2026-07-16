@@ -13,20 +13,24 @@ order: 700
         display: none;
     }
 </style>
-<!-- TradingView Widget BEGIN -->
-<div class="tradingview-widget-container">
+<div class="Page Price-page">
+  <header class="Page-header">
+    <h1 class="Page-title">Bitcoin Price</h1>
+  </header>
+  <!-- TradingView Widget BEGIN -->
+  <div class="tradingview-widget-container">
   <div id="tradingview_74720"></div>
   <div class="tradingview-widget-copyright"><a href="https://www.tradingview.com/" rel="noopener nofollow" target="_blank"><span class="blue-text">Track all markets on TradingView</span></a></div>
   <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
   <script type="text/javascript">
   new TradingView.widget(
   {
-  "width": "980",
+  "width": "100%",
   "height": "610",
   "symbol": "BITSTAMP:BTCUSD",
   "interval": "D",
   "timezone": "Etc/UTC",
-  "theme": "light",
+  "theme": "dark",
   "style": "1",
   "locale": "en",
   "enable_publishing": false,
@@ -35,5 +39,6 @@ order: 700
 }
   );
   </script>
+  </div>
+  <!-- TradingView Widget END -->
 </div>
-<!-- TradingView Widget END -->

@@ -1,15 +1,19 @@
 ---
 layout: 'default.html'
-description: 'Bitcoin Price'
-metaTitle: 'Bitcoin Price'
-title: Bitcoin Price
+description: 'Bitcoin Is'
+metaTitle: 'Bitcoin Is'
+title: Bitcoin Is
 permalink: 'bitcoinis/'
 eleventyNavigation:
 key: Price
 order: 700
 ---
-<button onclick="loadRandomQuote()">Load Random Quote</button>
-<h1 id="bitcoin-description">Bitcoin is ...</h1>
+<div class="Page Page--reading Quote-page">
+  <header class="Page-header">
+    <h1 class="Page-title" id="bitcoin-description">Bitcoin is ...</h1>
+  </header>
+  <button class="Quote-action" type="button" onclick="loadRandomQuote()">Load Random Quote</button>
+</div>
 
 <script>
   // Define an array of quotes with optional authors

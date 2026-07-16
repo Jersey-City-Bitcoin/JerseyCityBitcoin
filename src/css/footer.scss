@@ -1,7 +1,7 @@
 @import 'tokens';
 
 .Footer {
-  margin-top: 4rem;
+  margin-top: 0;
   border-top: 3px solid $accent;
   background: $bg;
 
@@ -17,8 +17,9 @@
 
     @media (max-width: $mid-screen) {
       flex-direction: column;
-      align-items: flex-start;
+      align-items: center;
       padding: 24px 20px;
+      text-align: center;
     }
   }
 
@@ -37,6 +38,10 @@
     gap: 10px;
     align-items: center;
     flex-wrap: wrap;
+
+    @media (max-width: $mid-screen) {
+      justify-content: center;
+    }
   }
 
   a {

@@ -18,6 +18,10 @@
     @media (max-width: $mid-screen) {
       padding: 12px 20px;
     }
+
+    @media (max-width: $small-screen) {
+      justify-content: center;
+    }
   }
 
   .Nav-stamp {
@@ -46,6 +50,12 @@
 
     @media (max-width: $mid-screen) {
       gap: 16px;
+    }
+
+    @media (max-width: $small-screen) {
+      width: 100%;
+      justify-content: center;
+      gap: 14px;
     }
 
     a {

@@ -7,24 +7,13 @@ preloadImg: '/assets/images/landing/coding-screen.jpg'
 preloadCSS: '/css/success.css'
 permalink: 'success/'
 ---
-<!-- ============================================ -->
-<!--                     FORM                     -->
-<!-- ============================================ -->
-<section id="contact-form" class="container">
-    <div class="form-wrapper">
-        <form id='contact'>
-            <input type='hidden' name='form-name' value='form' />
-            <h3 class="contact-topper">
-                <span>MESSAGE</span> RECIEVED
-            </h3>
-            <p>Thank You! Your submission has been received!</p>
-            <p class=" alert alert-dark " role=" alert">
-                <span class="text-center"><small>Return to <a
-                            href="https://{{client.domain}}/">{{client.name}}</a> you will be automatically redirected in <span class="redirectTimer">10</span>.</small></span>
-            </p>
-        </form>
-    </div>
-</section>
+<div class="Page Page--reading Success-page">
+  <header class="Page-header">
+    <h1 class="Page-title">Message Received</h1>
+    <p class="Page-intro">Thank you. Your submission has been received.</p>
+    <p class="Success-return" role="status">Return to <a href="https://{{client.domain}}/">{{client.name}}</a>. You will be automatically redirected in <span class="redirectTimer">10</span> seconds.</p>
+  </header>
+</div>
 <script>
     // Countdown timer and redirect
     let redirectTimer = 10;

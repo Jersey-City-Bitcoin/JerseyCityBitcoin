@@ -1,0 +1,393 @@
+@import 'tokens';
+
+.Page {
+  width: 100%;
+  max-width: $content-width;
+  margin: 0 auto;
+  padding: 64px 32px 96px;
+
+  @media (max-width: $mid-screen) {
+    padding: 44px 20px 72px;
+  }
+
+  &--reading {
+    max-width: $reading-width;
+  }
+}
+
+.Page-header {
+  max-width: $reading-width;
+  margin: 0 auto 52px;
+  text-align: center;
+
+  @media (max-width: $mid-screen) {
+    margin-bottom: 40px;
+  }
+}
+
+.Page-title {
+  margin: 0;
+  font-family: $font-display;
+  font-size: clamp(42px, 7vw, 72px);
+  font-weight: 700;
+  line-height: 0.98;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: $cream;
+}
+
+.Page-intro {
+  max-width: 680px;
+  margin: 18px auto 0;
+  font-size: 1.08rem;
+  line-height: 1.75;
+  color: $muted;
+
+  a {
+    color: $accent;
+    text-decoration: underline;
+    text-decoration-color: rgba(255, 153, 0, 0.45);
+    text-underline-offset: 3px;
+  }
+}
+
+.Page-section {
+  margin-top: 56px;
+
+  & + & {
+    margin-top: 72px;
+  }
+}
+
+.Page-section-title {
+  margin: 0 0 20px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid $border;
+  font-family: $font-display;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.3;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: $muted;
+}
+
+.About-links {
+  border-top: 1px solid $border;
+}
+
+.About-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 18px 0;
+  border-bottom: 1px solid $border;
+  color: $cream;
+
+  &:hover {
+    color: $cream;
+  }
+
+  &-label {
+    font-family: $font-display;
+    font-size: 20px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  &-action {
+    flex: 0 0 auto;
+    font-family: $font-display;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: $accent;
+  }
+}
+
+.Nostr-profile {
+  padding: 20px 0 14px;
+  border-bottom: 1px solid $border;
+}
+
+.Nostr-profile-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.Nostr-label {
+  display: block;
+  margin: 14px 0 8px;
+  font-family: $font-display;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: $muted;
+}
+
+.Nostr-copy {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 10px;
+
+  @media (max-width: $small-screen) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.Nostr-copy input {
+  min-width: 0;
+  width: 100%;
+  border: 1px solid $border;
+  border-radius: 0;
+  background: $surface;
+  color: $cream;
+  font-family: $font-mono;
+  font-size: 0.78rem;
+  line-height: 1.4;
+  padding: 11px 12px;
+}
+
+.Nostr-copy input:focus-visible {
+  outline: 3px solid $accent;
+  outline-offset: 2px;
+  border-color: $accent;
+}
+
+.Nostr-copy-button {
+  border: 1px solid $accent;
+  border-radius: 0;
+  background: transparent;
+  color: $accent;
+  cursor: pointer;
+  font-family: $font-display;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  padding: 10px 16px;
+  white-space: nowrap;
+  transition: background 0.15s ease, color 0.15s ease, transform 0.15s ease;
+
+  &:hover {
+    background: $accent;
+    color: $bg;
+  }
+
+  &:active {
+    transform: translateY(1px);
+  }
+
+  &:focus-visible {
+    outline: 3px solid $cream;
+    outline-offset: 3px;
+  }
+
+  @media (max-width: $small-screen) {
+    width: 100%;
+  }
+}
+
+.Nostr-copy-status {
+  min-height: 1.4em;
+  margin: 8px 0 0;
+  color: $muted;
+  font-size: 0.8rem;
+}
+
+.About-note {
+  margin: 28px 0 0;
+  padding: 20px 24px;
+  border-left: 4px solid $accent;
+  background: $surface;
+  color: $cream;
+  line-height: 1.7;
+}
+
+.Contact-form {
+  max-width: 560px;
+  margin: 0 auto;
+  display: grid;
+  gap: 20px;
+}
+
+.Contact-field {
+  margin: 0;
+
+  label {
+    display: grid;
+    gap: 8px;
+    font-family: $font-display;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: $muted;
+  }
+}
+
+.Contact-form input,
+.Contact-form textarea {
+  width: 100%;
+  border: 1px solid $border;
+  border-radius: 0;
+  background: $surface;
+  color: $cream;
+  font-family: $font-body;
+  font-size: 1rem;
+  line-height: 1.5;
+  padding: 13px 14px;
+}
+
+.Contact-form input {
+  min-height: 48px;
+}
+
+.Contact-form textarea {
+  min-height: 160px;
+  resize: vertical;
+}
+
+.Contact-form input:focus-visible,
+.Contact-form textarea:focus-visible {
+  outline: 3px solid $accent;
+  outline-offset: 2px;
+  border-color: $accent;
+}
+
+.Contact-captcha,
+.Contact-actions {
+  display: flex;
+  justify-content: center;
+}
+
+.Contact-submit,
+.Quote-action {
+  display: inline-block;
+  border: 0;
+  border-radius: 0;
+  background: $accent;
+  color: $bg;
+  cursor: pointer;
+  font-family: $font-display;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 14px 28px;
+  transition: background 0.15s ease, transform 0.15s ease;
+
+  &:hover {
+    background: $cream;
+  }
+
+  &:active {
+    transform: translateY(1px);
+  }
+
+  &:focus-visible {
+    outline: 3px solid $cream;
+    outline-offset: 3px;
+  }
+}
+
+.Quote-page {
+  text-align: center;
+
+  .Page-header {
+    margin-bottom: 28px;
+  }
+
+  #bitcoin-description {
+    font-size: clamp(36px, 6vw, 64px);
+    line-height: 1.08;
+  }
+}
+
+.Price-page .tradingview-widget-container {
+  width: 100%;
+  max-width: $content-width;
+  min-height: 610px;
+  margin: 0 auto;
+  overflow: hidden;
+  border: 1px solid $border;
+  background: $surface;
+
+  iframe {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+}
+
+.Cities-page {
+  > h1:first-child {
+    margin: 0 0 48px;
+    font-size: clamp(42px, 7vw, 64px);
+    line-height: 1;
+    text-align: center;
+    text-transform: uppercase;
+  }
+
+  > ul:last-child {
+    columns: 2;
+    column-gap: 28px;
+    margin-top: 32px;
+    padding: 0;
+    border-top: 1px solid $border;
+    list-style: none;
+
+    @media (max-width: $mid-screen) {
+      columns: 1;
+    }
+
+    li {
+      break-inside: avoid;
+      margin: 0;
+      padding: 10px 0;
+      border-bottom: 1px solid $border;
+
+      &::before {
+        content: none !important;
+      }
+    }
+
+    a {
+      font-family: $font-display;
+      font-size: 16px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+  }
+}
+
+.Success-page {
+  text-align: center;
+
+  .Page-intro {
+    color: $cream;
+  }
+
+  .Success-return {
+    margin-top: 24px;
+    color: $muted;
+  }
+}
+
+.Error-page {
+  text-align: center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .Contact-submit,
+  .Quote-action,
+  .Nostr-copy-button {
+    transition: none;
+  }
+}
