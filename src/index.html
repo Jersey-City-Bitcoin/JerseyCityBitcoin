@@ -10,68 +10,130 @@ eleventyNavigation:
 ---
 
 <div class="Home">
-  <p class="Home-about">
-    Jersey City Bitcoin is a decentralized community for those interested in meeting up to discuss, and learn more about
-    bitcoin in the Jersey City, New Jersey / New York area. You can be well versed or new, all are welcome. You can contact us <a href="/contact-us/">here</a>.
-  </p>
 
-  <div class="Home-posts">
-    <h2 class="Home-posts-title">Jersey City Bitcoin &amp; Beer Meetups</h2>
+  <!-- HERO POSTER -->
+  <section class="Hero">
+    <div class="Hero-inner">
+      <p class="Hero-location">Jersey City, New Jersey</p>
+      <h1 class="Hero-title">
+        <span class="Hero-title-line">Jersey</span>
+        <span class="Hero-title-line">City</span>
+        <span class="Hero-title-line accent">Bitcoin</span>
+      </h1>
+      <p class="Hero-tagline">All are welcome, whether you are well versed or new.</p>
+      <div class="Hero-details">
+        <div class="Hero-detail">
+          <span class="Hero-detail-label">Where</span>
+          <span class="Hero-detail-value">Jersey City, NJ</span>
+        </div>
+        <div class="Hero-detail">
+          <span class="Hero-detail-label">When</span>
+          <span class="Hero-detail-value">Monthly</span>
+        </div>
+      </div>
+      <div class="Hero-stamp"><span>All Are Welcome</span></div>
+    </div>
+  </section>
+
+  <!-- INTRO (real homepage copy — preserved verbatim) -->
+  <section class="Section">
+    <p class="Home-about">
+      Jersey City Bitcoin is a decentralized community for those interested in meeting up to discuss, and learn more about
+      bitcoin in the Jersey City, New Jersey / New York area. You can be well versed or new, all are welcome. You can contact us <a href="/contact-us/">here</a>.
+    </p>
+  </section>
+
+  <!-- BITCOIN & BEER MEETUPS -->
+  <section class="Section">
+    <h2 class="Section-header">Jersey City Bitcoin &amp; Beer Meetups</h2>
+    <div class="Posters">
     {% set beerCount = 0 %}
     {% for event in collections.events | reverse %}
     {% if event.data.type=="jcbtc" and event.data.published !=false and beerCount < 10 %}
-    <div class="Home-posts-post">
-      <span class="Home-posts-post-date event-date">{{ event.date | customDate }}</span>
-      <span class="Home-posts-post-arrow">&raquo;</span>
-      <a class="Home-posts-post-title" href="{{ event.url }}">{{ event.data.title }}</a>
+      <a class="Poster" href="{{ event.url }}">
+        <span class="Poster-date event-date">{{ event.date | customDate }}</span>
+        <span class="Poster-info">
+          <span class="Poster-type">Bitcoin &amp; Beer Meetup</span>
+          <span class="Poster-title">{{ event.data.title }}</span>
+        </span>
+        <span class="Poster-cta">View &rarr;</span>
+      </a>
       {% set beerCount = beerCount + 1 %}
-    </div>
     {% endif %}
     {% endfor %}
-  </div>
+    </div>
+  </section>
 
-  <div class="Home-posts">
-    <h2 class="Home-posts-title">Jersey City Bitcoin Socratic Seminar Meetups</h2>
+  <!-- SOCRATIC SEMINAR MEETUPS -->
+  <section class="Section">
+    <h2 class="Section-header">Jersey City Bitcoin Socratic Seminar Meetups</h2>
+    <div class="Posters">
     {% set socraticCount = 0 %}
     {% for event in collections.events | reverse %}
     {% if event.data.type=="jcbtc-socratic" and event.data.published !=false and socraticCount < 10 %}
-    <div class="Home-posts-post">
-      <span class="Home-posts-post-date event-date">{{ event.date | customDate }}</span>
-      <span class="Home-posts-post-arrow">&raquo;</span>
-      <a class="Home-posts-post-title" href="{{ event.url }}">{{ event.data.title }}</a>
+      <a class="Poster" href="{{ event.url }}">
+        <span class="Poster-date event-date">{{ event.date | customDate }}</span>
+        <span class="Poster-info">
+          <span class="Poster-type">Socratic Seminar</span>
+          <span class="Poster-title">{{ event.data.title }}</span>
+        </span>
+        <span class="Poster-cta">View &rarr;</span>
+      </a>
       {% set socraticCount = socraticCount + 1 %}
-    </div>
     {% endif %}
     {% endfor %}
-  </div>
+    </div>
+  </section>
 
-  <div class="Home-posts">
-    <h2 class="Home-posts-title">Other Events</h2>
+  <!-- OTHER EVENTS -->
+  <section class="Section">
+    <h2 class="Section-header">Other Events</h2>
+    <div class="Posters">
     {% set otherCount = 0 %}
     {% for event in collections.events | reverse %}
     {% if event.data.type !="jcbtc" and event.data.type !="jcbtc-socratic" and event.data.published !=false and otherCount < 10 %}
-    <div class="Home-posts-post">
-      <span class="Home-posts-post-date event-date">{{ event.date | customDate }}</span>
-      <span class="Home-posts-post-arrow">&raquo;</span>
-      <a class="Home-posts-post-title" href="{{ event.url }}">{{ event.data.title }}</a>
+      <a class="Poster" href="{{ event.url }}">
+        <span class="Poster-date event-date">{{ event.date | customDate }}</span>
+        <span class="Poster-info">
+          <span class="Poster-type">Event</span>
+          <span class="Poster-title">{{ event.data.title }}</span>
+        </span>
+        <span class="Poster-cta">View &rarr;</span>
+      </a>
       {% set otherCount = otherCount + 1 %}
+    {% endif %}
+    {% endfor %}
     </div>
-      {% endif %}
-      {% endfor %}
-      <p><a href="/events/">See all events</a></p>
-  </div>
+    <p class="Section-more"><a href="/events/">See all events &rarr;</a></p>
+  </section>
 
-  <div class="Home-posts">
-    <h2 class="Home-posts-title">Recent Blog Posts</h2>
+  <!-- RECENT BLOG POSTS -->
+  <section class="Section">
+    <h2 class="Section-header">Recent Blog Posts</h2>
+    <div class="Posters">
     {% for post in collections.blog | reverse %}
-    {% if loop.index <= 10 and post.data.published==true %} <div class="Home-posts-post">
-      <span class="Home-posts-post-date">{{ post.data.date | customDate }}</span>
-      <span class="Home-posts-post-arrow">&raquo;</span>
-      <a class="Home-posts-post-title" href="{{ post.url }}">{{ post.data.title }}</a>
-      {% endif %}
-      {% endfor %}
-      <p><a href="/blog/">See all blog posts</a></p>
-  </div>
+    {% if loop.index <= 10 and post.data.published==true %}
+      <a class="Poster" href="{{ post.url }}">
+        <span class="Poster-date">{{ post.data.date | customDate }}</span>
+        <span class="Poster-info">
+          <span class="Poster-type">Blog Post</span>
+          <span class="Poster-title">{{ post.data.title }}</span>
+        </span>
+        <span class="Poster-cta">Read &rarr;</span>
+      </a>
+    {% endif %}
+    {% endfor %}
+    </div>
+    <p class="Section-more"><a href="/blog/">See all blog posts &rarr;</a></p>
+  </section>
+
+  <!-- CTA BAND -->
+  <section class="CTA">
+    <h2 class="CTA-title">All Are <span>Welcome</span></h2>
+    <p class="CTA-sub">Well versed or brand new, come as you are.</p>
+    <a class="CTA-btn" href="{{ client.meetup }}" target="_blank" rel="noopener">RSVP to the Next Meetup</a>
+  </section>
+
 </div>
 
 <script>

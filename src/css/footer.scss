@@ -1,42 +1,49 @@
-// Typography
-$body-font: 'Source Code Pro', monospace;
-$base-font-size: 16px;
-
-// Colors
-$primary-color: #FF9900;
-$background-color: #FFF;
-$font-color: #333;
-
-// Screen size for responsiveness
-$small-screen: 400px;
-$mid-screen: 768px;
-$large-screen: 1024px;
-
+@import 'tokens';
 
 .Footer {
-  margin-top: 2rem;
-
-  &-border {
-    opacity: 0.4;
-    margin-bottom: 1em;
-    overflow: hidden;
-    user-select: none;
-    text-wrap: nowrap;
-    text-align: center;
-  }
+  margin-top: 4rem;
+  border-top: 3px solid $accent;
+  background: $bg;
 
   &-inner {
+    max-width: $content-width;
+    margin: 0 auto;
+    padding: 28px 32px;
     display: flex;
     justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
 
-    a {
-      color: #333;
-      opacity: 0.4;
+    @media (max-width: $mid-screen) {
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 24px 20px;
+    }
+  }
 
-      &:hover {
-        color: $primary-color;
-        opacity: 1;
-      }
+  &-source,
+  &-meta {
+    font-family: $font-display;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: $muted-2;
+    margin: 0;
+  }
+
+  &-meta {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  a {
+    color: $accent;
+
+    &:hover {
+      color: lighten($accent, 12%);
     }
   }
 }

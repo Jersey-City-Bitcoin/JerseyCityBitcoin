@@ -1,89 +1,69 @@
-// Typography
-$body-font: 'Source Code Pro', monospace;
-$base-font-size: 16px;
-
-// Colors
-$primary-color: #FF9900;
-$background-color: #FFF;
-$font-color: #333;
-
-// Screen size for responsiveness
-$small-screen: 400px;
-$mid-screen: 768px;
-$large-screen: 1024px;
+@import 'tokens';
 
 .Header {
-  margin-bottom: 0.75rem;
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: $bg;
+  border-bottom: 3px solid $accent;
 
-  .Header-logo {
+  .Nav {
     display: flex;
-    justify-content: flex-end;
     align-items: center;
-    font-family: $body-font;
-    font-size: 2.2rem;
-    text-decoration: underline solid $primary-color;
-    margin-bottom: 0.75rem;
-
-    img {
-      width: 4.5rem;
-      height: 4.5rem;
-      margin: 0 1rem 0 1rem;
-    }
-
-    .short-title {
-      display: none;
-    }
-
-    @media (max-width: 600px) {
-      .long-title {
-        display: none;
-      }
-      .short-title {
-        display: inline;
-      }
-    }
-
-  } 
-
-  &-border {
-    opacity: 0.4;
-    margin-top: 0.4rem;
-    overflow: hidden;
-    user-select: none;
-    text-wrap: nowrap;
-    text-align: center;
-  }
-
-  &-inner {
-    display: flex;
     justify-content: space-between;
-    align-items: center;
-  }
+    gap: 16px;
+    flex-wrap: wrap;
+    padding: 14px 32px;
 
-  &-logo {
-    font-size: 2.2rem;
-
-    @media (max-width: $small-screen) {
-      font-size: 1.8rem;
+    @media (max-width: $mid-screen) {
+      padding: 12px 20px;
     }
   }
 
-  &-nav {
-    display: flex;
-    font-size: 1.3rem;
+  .Nav-stamp {
+    font-family: $font-display;
+    font-weight: 700;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    color: $accent;
+    border: 2px solid $accent;
+    padding: 4px 12px;
+    display: inline-block;
+    transform: rotate(-1deg);
 
-    @media (max-width: $small-screen) {
-      font-size: 1.1rem;
+    &:hover {
+      background: $accent;
+      color: $bg;
+    }
+  }
+
+  .Nav-links {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    flex-wrap: wrap;
+
+    @media (max-width: $mid-screen) {
+      gap: 16px;
     }
 
     a {
-      color: #333;
-      opacity: 0.4;
-      margin-left: 1.5rem;
+      font-family: $font-display;
+      font-size: 13px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: $muted;
 
       &:hover {
-        color: $primary-color;
-        opacity: 1;
+        color: $accent;
+      }
+
+      &.active-menu {
+        color: $cream;
+        border-bottom: 2px solid $accent;
+        padding-bottom: 2px;
       }
     }
   }
