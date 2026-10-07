@@ -5,7 +5,7 @@ title: "JC Bitcoin Socratic Seminar #12"
 type: jcbtc-socratic
 date: 2026-10-15
 tags: [event]
-meetup: https://luma.com/axva8t9n?tk=Doqx7o
+meetup: https://www.meetup.com/jersey-city-bitcoin/events/wflmvtyjcnbtb/
 ---
 
 ## About Event
@@ -22,7 +22,7 @@ In this classroom style event we will discuss some relevant bitcoin news and how
 
 This meetup is designed for bitcoin beginners so don't be shy and please bring your questions!
 
-Reserve your seat on <a href="https://luma.com/axva8t9n?tk=Doqx7o" target="_blank">Luma</a>.
+Reserve your seat on <a href="https://www.meetup.com/jersey-city-bitcoin/events/wflmvtyjcnbtb/" target="_blank">Meetup</a>.
 
 ## Location
 
