@@ -1,5 +1,5 @@
 ---
-meetup: https://www.eventbrite.com/e/jersey-city-bitcoin-meetup-tickets-824077276317?aff=oddtdtcreator
+meetup: https://www.meetup.com/jersey-city-bitcoin/events/hglmvtyjcnblb/
 layout: post
 published: true
 title: "Jersey City Bitcoin Meetup #46"

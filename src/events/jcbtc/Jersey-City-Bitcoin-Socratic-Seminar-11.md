@@ -5,7 +5,7 @@ title: "JC Bitcoin Socratic Seminar #11"
 type: jcbtc-socratic
 date: 2026-09-17
 tags: [event]
-meetup: https://luma.com/user/usr-Mu6rRjVWwUw3XVK
+meetup: https://www.meetup.com/jersey-city-bitcoin/events/316319551/
 ---
 
 ## About Event
