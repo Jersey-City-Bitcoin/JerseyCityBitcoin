@@ -15,6 +15,7 @@ const {
   lightningUri,
   qrSvg,
   setNotice,
+  renderSizes,
   createShop,
 } = require('../src/assets/js/shirt-store');
 const qrcode = require('../src/assets/js/vendor/qrcode-generator-2.0.4.js');
@@ -620,6 +621,24 @@ test('the sold-out notice bolds its first sentence with DOM nodes', () => {
   setNotice(el, '');
   assert.deepEqual(el.children, []);
   assert.equal(el.hidden, true);
+});
+
+test('size tiles say Available or Sold out and never show a count', () => {
+  const node = (tag) => ({
+    tag, textContent: '', children: [],
+    appendChild(child) { this.children.push(child); },
+  });
+  const box = node('div');
+  box.ownerDocument = { createElement: node };
+  const view = { querySelector: (sel) => (sel === '[data-sizes]' ? box : null) };
+  const open = renderSizes(view, { sizes: { S: 7, L: 0 } });
+  assert.equal(open, 1);
+  const note = (label) => label.children[1].children[1].textContent;
+  const [s, l] = box.children;
+  assert.equal(note(s), 'Available');
+  assert.doesNotMatch(note(s), /7/);
+  assert.equal(note(l), 'Sold out');
+  assert.equal(l.children[0].disabled, true);
 });
 
 test('the overpaid and paid-twice views show no sats amount', () => {

@@ -392,7 +392,7 @@
       input.disabled = left < 1;
       input.checked = left > 0 && size === keep;
       name.textContent = size;
-      note.textContent = left > 0 ? left + ' left' : 'Sold out';
+      note.textContent = left > 0 ? 'Available' : 'Sold out';
       face.appendChild(name);
       face.appendChild(note);
       label.appendChild(input);
@@ -535,6 +535,7 @@
     lightningUri: lightningUri,
     qrSvg: qrSvg,
     setNotice: setNotice,
+    renderSizes: renderSizes,
     createShop: createShop,
     mount: mount,
   };
