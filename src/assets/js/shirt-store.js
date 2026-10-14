@@ -70,6 +70,12 @@
     return Math.floor(total / 60) + ':' + (seconds < 10 ? '0' : '') + seconds;
   }
 
+  function lightningUri(invoice) {
+    if (typeof invoice !== 'string' || !/^lnbc[0-9]*[munp]?1[02-9ac-hj-np-z]+$/i.test(invoice)) return '';
+    if (invoice !== invoice.toLowerCase() && invoice !== invoice.toUpperCase()) return '';
+    return 'lightning:' + invoice;
+  }
+
   function qrSvg(text, qrcodeLib) {
     if (typeof qrcodeLib !== 'function' || !text) return '';
     try {
@@ -189,21 +195,14 @@
 
     function startLightning() {
       stopPolling();
+      if (!lightningUri(order.invoice)) return show('checking');
       show('lightning');
       polling = true;
       pollStarted = now();
       schedule();
     }
 
-    function resume() {
-      if (order.rail === 'cash') return show('cash');
-      if (!order.state || order.state === 'awaiting_payment') return startLightning();
-      return show(viewForState(order.state) || 'checking');
-    }
-
-    function load() {
-      order = loadSaved();
-      if (order) return Promise.resolve(resume());
+    function loadStore() {
       return Promise.all([request('/health'), request('/stock')]).then(function (r) {
         var health = r[0];
         var answer = r[1];
@@ -211,6 +210,52 @@
         stock = answer.body;
         show('form');
       }, offline);
+    }
+
+    function forgetOrder() {
+      order = null;
+      save();
+    }
+
+    function refreshOrder() {
+      stopPolling();
+      show('checking');
+      var path = '/order/' + encodeURIComponent(order.order) + '?t=' + encodeURIComponent(order.token);
+      return request(path).then(function (r) {
+        var b = r.body;
+        if (r.status === 404 && b && b.error === 'not_found') {
+          forgetOrder();
+          return loadStore();
+        }
+        if (!r.ok || !b || !viewForState(b.state)) return show('checking');
+
+        var sameQuote = order.state === 'awaiting_payment' && Boolean(b.expiresAt) && b.expiresAt === order.expiresAt;
+        var newInvoice = typeof b.invoice === 'string' && b.invoice && b.invoice !== order.invoice;
+        if (b.state === 'awaiting_payment' && (!sameQuote || newInvoice)) {
+          // An old invoice must not be paired with a replacement quote's price or expiry.
+          delete order.invoice;
+          delete order.lightning;
+          delete order.sats;
+          delete order.expiresAt;
+        }
+        ['state', 'size', 'priceUsd', 'sats', 'invoice', 'lightning', 'expiresAt', 'pickup'].forEach(function (key) {
+          if (Object.prototype.hasOwnProperty.call(b, key)) order[key] = b[key];
+        });
+        save();
+        if (order.state === 'awaiting_payment') {
+          if (!order.invoice || typeof order.sats !== 'number' || !isFinite(order.sats) || !isFinite(Date.parse(order.expiresAt))) {
+            return show('checking');
+          }
+          return startLightning();
+        }
+        return show(viewForState(order.state));
+      }, function () { show('checking'); });
+    }
+
+    function load() {
+      order = loadSaved();
+      if (order) return refreshOrder();
+      return loadStore();
     }
 
     function refreshStockWithError(code, size) {
@@ -264,9 +309,10 @@
           save();
           return startLightning();
         }
-        if (isOfflineAnswer(r)) return offline();
+        if (b && b.error === 'not_expired') return refreshOrder();
+        if (isOfflineAnswer(r)) return refreshOrder();
         return show('expired', b.error, order.size);
-      }, offline);
+      }, refreshOrder);
     }
 
     return {
@@ -374,7 +420,12 @@
     }
 
     function renderLightning(view, order) {
-      var link = order.lightning || 'lightning:' + order.invoice;
+      var link = lightningUri(order.invoice);
+      if (!link) {
+        view.querySelector('[data-wallet-link]').removeAttribute('href');
+        view.querySelector('[data-qr]').textContent = '';
+        return;
+      }
       view.querySelector('[data-wallet-link]').setAttribute('href', link);
       view.querySelector('[data-qr]').innerHTML = qrSvg(link, win.qrcode);
       var clock = view.querySelector('[data-countdown]');
@@ -423,7 +474,7 @@
       var button = form.querySelector('[data-submit]');
       var size = form.querySelector('input[name="size"]:checked');
       var rail = form.querySelector('input[name="rail"]:checked');
-      var done = function () { button.disabled = false; };
+      var done = function () { button.disabled = !form.querySelector('input[name="size"]:not(:disabled)'); };
       button.disabled = true;
       shop.placeOrder({
         size: size ? size.value : '',
@@ -477,6 +528,7 @@
     formatSats: formatSats,
     formatUsd: formatUsd,
     formatCountdown: formatCountdown,
+    lightningUri: lightningUri,
     qrSvg: qrSvg,
     setNotice: setNotice,
     createShop: createShop,
