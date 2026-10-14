@@ -78,7 +78,7 @@
       if (/^[0-9A-Z $%*+\-./:]*$/.test(upper)) qr.addData(upper, 'Alphanumeric');
       else qr.addData(text);
       qr.make();
-      return qr.createSvgTag({ cellSize: 4, margin: 0, scalable: true });
+      return qr.createSvgTag({ cellSize: 4, margin: 16, scalable: true });
     } catch (err) {
       return '';
     }
@@ -306,10 +306,18 @@
     });
   }
 
-  function setNotice(el, text) {
+  function setNotice(el, text, lead) {
     if (!el) return;
-    el.textContent = text || '';
-    el.hidden = !text;
+    el.textContent = '';
+    if (lead) {
+      var strong = el.ownerDocument.createElement('strong');
+      strong.textContent = lead;
+      el.appendChild(strong);
+      if (text) el.appendChild(el.ownerDocument.createTextNode(' ' + text));
+    } else {
+      el.textContent = text || '';
+    }
+    el.hidden = !lead && !text;
   }
 
   function renderSizes(view, stock, chosen) {
@@ -352,10 +360,15 @@
 
     function renderForm(view, data) {
       var open = renderSizes(view, data.stock, data.size);
-      var sizeNote = '';
-      if (open === 0) sizeNote = 'All sizes are sold out.';
-      else if (data.error === 'sold_out') sizeNote = messageFor('sold_out', data.size) + ' The other sizes are still available.';
-      setNotice(view.querySelector('[data-size-notice]'), sizeNote);
+      var notice = view.querySelector('[data-size-notice]');
+      if (open === 0) setNotice(notice, 'All sizes are sold out.');
+      else if (data.error === 'sold_out') setNotice(notice, 'The other sizes are still available.', messageFor('sold_out', data.size));
+      else setNotice(notice, '');
+      if (data.error === 'sold_out') {
+        var header = win.document.querySelector('.Header');
+        notice.style.scrollMarginTop = ((header ? header.offsetHeight : 0) + 16) + 'px';
+        notice.scrollIntoView({ block: 'start' });
+      }
       setNotice(view.querySelector('[data-form-error]'), data.error && data.error !== 'sold_out' ? messageFor(data.error, data.size) : '');
       view.querySelector('[data-submit]').disabled = open === 0;
     }
@@ -465,6 +478,7 @@
     formatUsd: formatUsd,
     formatCountdown: formatCountdown,
     qrSvg: qrSvg,
+    setNotice: setNotice,
     createShop: createShop,
     mount: mount,
   };

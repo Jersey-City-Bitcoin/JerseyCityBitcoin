@@ -13,6 +13,7 @@ const {
   formatSats,
   formatCountdown,
   qrSvg,
+  setNotice,
   createShop,
 } = require('../src/assets/js/shirt-store');
 const qrcode = require('../src/assets/js/vendor/qrcode-generator-2.0.4.js');
@@ -384,6 +385,51 @@ test('the vendored QR library draws the invoice as SVG', () => {
   assert.match(svg, /<path d="M/);
   assert.equal(qrSvg('', qrcode), '');
   assert.equal(qrSvg('lightning:x', undefined), '');
+});
+
+test('the QR has a 4-module white quiet zone', () => {
+  const text = 'lightning:lnbc386500n1ptest0invoice';
+  const qr = qrcode(0, 'M');
+  qr.addData(text.toUpperCase(), 'Alphanumeric');
+  qr.make();
+  const size = (qr.getModuleCount() + 8) * 4;
+  const svg = qrSvg(text, qrcode);
+  assert.match(svg, new RegExp(`viewBox="0 0 ${size} ${size}"`));
+  assert.match(svg, /<rect width="100%" height="100%" fill="white"/);
+  const coords = [...svg.matchAll(/M(\d+),(\d+)/g)].flatMap((m) => [Number(m[1]), Number(m[2])]);
+  assert.equal(Math.min(...coords), 16);
+  assert.equal(Math.max(...coords), size - 16 - 4);
+});
+
+test('the sold-out notice bolds its first sentence with DOM nodes', () => {
+  const doc = {
+    createElement: (tag) => ({ tag, textContent: '' }),
+    createTextNode: (text) => ({ text }),
+  };
+  const el = {
+    ownerDocument: doc,
+    children: [],
+    hidden: true,
+    set textContent(v) { this.children = v ? [{ text: v }] : []; },
+    set innerHTML(v) { throw new Error('innerHTML used'); },
+    appendChild(node) { this.children.push(node); },
+  };
+  setNotice(el, 'The other sizes are still available.', 'Size M is sold out.');
+  assert.deepEqual(el.children, [{ tag: 'strong', textContent: 'Size M is sold out.' }, { text: ' The other sizes are still available.' }]);
+  assert.equal(el.hidden, false);
+  setNotice(el, 'All sizes are sold out.');
+  assert.deepEqual(el.children, [{ text: 'All sizes are sold out.' }]);
+  setNotice(el, '');
+  assert.deepEqual(el.children, []);
+  assert.equal(el.hidden, true);
+});
+
+test('the overpaid and paid-twice views show no sats amount', () => {
+  const html = fs.readFileSync(path.join(__dirname, '../src/pages/shirt.html'), 'utf8');
+  for (const view of ['overpaid', 'double_paid']) {
+    const block = html.split(`data-view="${view}"`)[1].split('data-view=')[0];
+    assert.doesNotMatch(block, /data-fill="sats"/, view);
+  }
 });
 
 test('the script never sets window.onload, which confetti.js owns', () => {
