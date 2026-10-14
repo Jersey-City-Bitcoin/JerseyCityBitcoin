@@ -1,0 +1,254 @@
+---
+layout: 'default.html'
+description: 'The JC Bitcoin shirt. Order online and pick it up at the next Jersey City Bitcoin meetup.'
+metaTitle: 'The JC Bitcoin Shirt'
+title: Shirt
+permalink: 'shirt/'
+---
+<style>
+.Merch { max-width: 1100px; margin: 0 auto; padding: 48px 24px 88px; }
+.Merch-hero h1 { font-family: 'Oswald', system-ui, sans-serif; text-transform: uppercase; font-size: clamp(2rem, 5vw, 3.2rem); letter-spacing: 1px; margin: 0 0 8px; }
+.Merch-hero h1 span { color: #ff9900; }
+.Merch-kicker { font-family: 'JetBrains Mono', monospace; color: #a08862; text-transform: uppercase; letter-spacing: 2px; font-size: .8rem; }
+.Merch h2 { font-family: 'Oswald', system-ui, sans-serif; text-transform: uppercase; letter-spacing: 1px; }
+.Merch-fine { color: #a08862; font-size: .8rem; margin-top: 32px; }
+.Shop { max-width: 560px; margin-top: 36px; }
+.Shop-loading { color: #a08862; font-family: 'JetBrains Mono', monospace; font-size: .85rem; margin-top: 36px; }
+.Shop-price { font-family: 'Oswald', system-ui, sans-serif; font-size: 2.2rem; font-weight: 700; color: #ff9900; line-height: 1; margin: 0 0 6px; }
+.Shop-sub { color: #cfc7b8; font-size: .95rem; margin: 0 0 24px; }
+.Contact-form.Shop-form { max-width: none; margin: 0; gap: 22px; }
+.Shop-set { border: 0; margin: 0; padding: 0; min-width: 0; }
+.Shop-label { display: block; padding: 0; margin-bottom: 8px; font-family: 'Oswald', system-ui, sans-serif; font-size: 12px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #a08862; }
+.Shop-explain { color: #cfc7b8; font-size: .9rem; margin: 0; }
+.Shop-explain a { color: #ff9900; }
+.Sizes { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px; }
+@media (max-width: 400px) { .Sizes { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.Size { position: relative; display: block; }
+.Shop-form .Size input { position: absolute; opacity: 0; pointer-events: none; width: 1px; height: 1px; min-height: 0; padding: 0; }
+.Size span { display: block; background: #1a1810; border: 1px solid #2a2520; padding: 10px 4px 8px; text-align: center; cursor: pointer; }
+.Size b { display: block; font-family: 'Oswald', system-ui, sans-serif; font-size: 1.1rem; font-weight: 600; letter-spacing: 1px; color: #f5f0e6; }
+.Size small { display: block; font-family: 'JetBrains Mono', monospace; font-size: .68rem; color: #a08862; letter-spacing: .5px; margin-top: 2px; }
+.Size input:checked + span { border: 2px solid #ff9900; padding: 9px 3px 7px; }
+.Size input:checked + span small { color: #ff9900; }
+.Size input:focus-visible + span { outline: 3px solid #ff9900; outline-offset: 2px; }
+.Size--out span { cursor: not-allowed; opacity: .45; }
+.Size--out b { text-decoration: line-through; }
+.Pay { display: grid; gap: 10px; }
+.Pay-opt { display: flex; gap: 12px; align-items: flex-start; background: #1a1810; border: 1px solid #2a2520; padding: 14px 16px; cursor: pointer; }
+.Shop-form .Pay-opt input { accent-color: #ff9900; width: 18px; height: 18px; min-height: 0; margin-top: 3px; padding: 0; flex: none; }
+.Pay-opt--on { border-left: 4px solid #ff9900; }
+.Pay-name { font-family: 'Oswald', system-ui, sans-serif; text-transform: uppercase; letter-spacing: .5px; font-size: 1rem; display: block; }
+.Pay-note { display: block; color: #cfc7b8; font-size: .88rem; margin-top: 2px; }
+.Hint { color: #a08862; font-size: .82rem; margin: -12px 0 0; }
+.Pickup { background: #1a1810; border: 1px solid #2a2520; padding: 16px 18px; }
+.Pickup-h { font-family: 'JetBrains Mono', monospace; color: #a08862; text-transform: uppercase; letter-spacing: 2px; font-size: .72rem; margin: 0 0 6px; }
+.Pickup p { margin: 0; }
+.Notice { background: #1a1810; border: 1px solid #2a2520; border-left: 4px solid #a08862; padding: 14px 16px; color: #cfc7b8; font-size: .92rem; margin: 0; }
+.Notice strong { color: #f5f0e6; }
+.Panel .Notice { margin-top: 0; }
+.Contact-submit:disabled { opacity: .5; cursor: not-allowed; }
+.Contact-submit--ghost { background: transparent; color: #ff9900; border: 1px solid #ff9900; }
+.Contact-submit--ghost:hover { background: transparent; color: #ffb23d; }
+.Panel { max-width: 560px; margin: 32px auto 0; background: #1a1810; border: 1px solid #2a2520; border-top: 4px solid #ff9900; padding: 28px 24px; }
+@media (max-width: 400px) { .Panel { padding: 22px 16px; } }
+.Panel--muted { border-top-color: #a08862; }
+.Panel h2 { border: 0; padding: 0; margin: 0 0 8px; font-size: 1.6rem; }
+.Panel h2:focus { outline: none; }
+.Panel-lede { color: #cfc7b8; margin: 0 0 20px; }
+.Panel-lede a, .Panel a:not(.Contact-submit) { color: #ff9900; }
+.Panel-explain { margin-top: 20px; }
+.Amount { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; border-bottom: 1px solid #2a2520; padding-bottom: 14px; margin-bottom: 18px; }
+.Amount-sats { font-family: 'Oswald', system-ui, sans-serif; font-size: 2rem; font-weight: 700; color: #ff9900; line-height: 1; }
+.Amount-usd { font-family: 'JetBrains Mono', monospace; color: #a08862; font-size: .85rem; }
+.Qr { background: #ffffff; padding: 10px; width: 100%; max-width: 280px; margin: 0 auto 8px; display: block; }
+.Qr svg { display: block; width: 100%; height: auto; }
+.Timer { text-align: center; font-family: 'JetBrains Mono', monospace; font-size: .85rem; color: #a08862; margin: 10px 0 18px; }
+.Timer b { color: #f5f0e6; font-weight: 500; }
+.Actions { display: grid; gap: 10px; }
+.Actions .Contact-submit { display: block; text-align: center; width: 100%; text-decoration: none; }
+.Actions a.Contact-submit { color: #13120e; }
+.Invoice { font-family: 'JetBrains Mono', monospace; font-size: .72rem; color: #a08862; word-break: break-all; background: #13120e; border: 1px solid #2a2520; padding: 10px 12px; margin: 14px 0 0; }
+.Status { display: flex; align-items: center; gap: 10px; margin-top: 18px; color: #cfc7b8; font-size: .9rem; }
+.Status-dot { width: 10px; height: 10px; border-radius: 50%; background: #a08862; flex: none; }
+.Facts { display: grid; grid-template-columns: max-content 1fr; gap: 10px 18px; margin: 0 0 20px; }
+.Facts > div { display: contents; }
+.Facts > div[hidden] { display: none; }
+.Facts dt { font-family: 'Oswald', system-ui, sans-serif; font-size: 12px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #a08862; padding-top: 3px; }
+.Facts dd { margin: 0; color: #f5f0e6; }
+.Ordnum { font-family: 'JetBrains Mono', monospace; font-size: 1.15rem; color: #ff9900; letter-spacing: 1px; }
+.Big { font-family: 'Oswald', system-ui, sans-serif; text-transform: uppercase; letter-spacing: 1px; font-size: 1.15rem; color: #ff9900; margin: 0 0 18px; }
+.Payflow { display: flex; flex-direction: column; }
+.Payflow-qr { order: 1; }
+.Payflow-timer { order: 2; }
+.Payflow-act { order: 3; }
+@media (max-width: 768px) {
+  .Payflow-timer { order: 0; margin-top: 0; }
+  .Payflow-act { order: 1; margin-bottom: 22px; }
+  .Payflow-qr { order: 2; }
+}
+</style>
+
+<div class="Merch" data-shirt-store>
+  <div class="Merch-hero">
+    <div class="Merch-kicker">Jersey City Bitcoin merch</div>
+    <h1>The JC Bitcoin <span>Shirt</span></h1>
+  </div>
+
+  <div data-view="loading">
+    <p class="Shop-loading">Loading the shirt store.</p>
+  </div>
+
+  <div class="Shop" data-view="form" hidden>
+    <p class="Shop-price" data-fill="price-usd"></p>
+    <p class="Shop-sub">Pick it up at the next meetup. No shipping.</p>
+    <form class="Contact-form Shop-form" data-order-form>
+      <fieldset class="Shop-set">
+        <legend class="Shop-label">Size</legend>
+        <div class="Sizes" data-sizes></div>
+      </fieldset>
+      <p class="Notice" data-size-notice role="status" hidden></p>
+      <p class="Contact-field"><label>Phone <input type="tel" name="phone" autocomplete="tel" required></label></p>
+      <p class="Contact-field"><label>Email <input type="email" name="email" autocomplete="email" required></label></p>
+      <p class="Hint">Used only if we need to reach you about this order.</p>
+      <fieldset class="Shop-set">
+        <legend class="Shop-label">How do you want to pay?</legend>
+        <div class="Pay">
+          <label class="Pay-opt Pay-opt--on"><input type="radio" name="rail" value="ln" checked><span><span class="Pay-name">Pay now in Bitcoin</span><span class="Pay-note">Lightning invoice. The sats price is held for 15 minutes.</span></span></label>
+          <label class="Pay-opt"><input type="radio" name="rail" value="cash"><span><span class="Pay-name">Reserve, pay cash at pickup</span><span class="Pay-note">Pay <span data-fill="price-usd"></span> cash at the meetup. We hold your shirt until the meetup ends.</span></span></label>
+        </div>
+      </fieldset>
+      <p class="Shop-explain">Paying in bitcoin takes a Lightning wallet with sats in it, like <a href="https://phoenix.acinq.co/" target="_blank" rel="noopener">Phoenix</a>, the phone wallet we recommend. No wallet yet? Reserve your shirt and pay cash at the meetup.</p>
+      <div class="Pickup" data-row>
+        <p class="Pickup-h">Pickup</p>
+        <p><span data-fill="pickup-date"></span><br><span data-fill="pickup-venue"></span></p>
+      </div>
+      <p class="Notice" data-form-error role="alert" hidden></p>
+      <div><button class="Contact-submit" type="submit" data-submit>Place order</button></div>
+    </form>
+  </div>
+
+  <div class="Panel" data-view="lightning" hidden>
+    <h2 tabindex="-1">Pay with Lightning</h2>
+    <p class="Panel-lede">Order <span class="Ordnum" data-fill="order"></span> &middot; Size <span data-fill="size"></span> &middot; <span data-fill="price-usd"></span></p>
+    <div class="Amount">
+      <span class="Amount-sats" data-fill="sats"></span>
+      <span class="Amount-usd">= <span data-fill="price-usd-cents"></span></span>
+    </div>
+    <div class="Payflow">
+      <div class="Payflow-qr">
+        <div class="Qr" data-qr role="img" aria-label="Lightning invoice QR code"></div>
+        <p style="text-align:center;margin:0">Scan with your wallet.</p>
+      </div>
+      <p class="Timer Payflow-timer">Quote expires in <b data-countdown></b></p>
+      <div class="Actions Payflow-act">
+        <a class="Contact-submit" href="#" data-wallet-link>Pay with a wallet on this phone</a>
+        <button class="Contact-submit Contact-submit--ghost" type="button" data-copy>Copy invoice</button>
+      </div>
+    </div>
+    <p class="Invoice" data-fill="invoice"></p>
+    <div class="Status" role="status"><span class="Status-dot"></span><span>Waiting for payment. This page updates on its own.</span></div>
+    <p class="Shop-explain Panel-explain">No wallet yet? Phoenix is the Lightning wallet we recommend for phones, and our <a href="/resources/">resources page</a> links to it.</p>
+  </div>
+
+  <div class="Panel" data-view="paid" hidden>
+    <h2 tabindex="-1">Payment received</h2>
+    <p class="Big">Your shirt is paid for.</p>
+    <dl class="Facts">
+      <div data-row><dt>Order</dt><dd><span class="Ordnum" data-fill="order"></span></dd></div>
+      <div data-row><dt>Size</dt><dd data-fill="size"></dd></div>
+      <div data-row><dt>Paid</dt><dd data-fill="sats"></dd></div>
+      <div data-row><dt>Pickup</dt><dd data-fill="pickup-date"></dd></div>
+      <div data-row><dt>Venue</dt><dd data-fill="pickup-venue"></dd></div>
+    </dl>
+    <p class="Notice"><strong>Save this order number.</strong> We do not send a confirmation email. Show the number at the meetup to collect your shirt.</p>
+  </div>
+
+  <div class="Panel" data-view="overpaid" hidden>
+    <h2 tabindex="-1">Payment received, more than the price</h2>
+    <p class="Big">Your shirt is paid for.</p>
+    <dl class="Facts">
+      <div data-row><dt>Order</dt><dd><span class="Ordnum" data-fill="order"></span></dd></div>
+      <div data-row><dt>Size</dt><dd data-fill="size"></dd></div>
+      <div data-row><dt>Price</dt><dd data-fill="sats"></dd></div>
+      <div data-row><dt>Pickup</dt><dd data-fill="pickup-date"></dd></div>
+      <div data-row><dt>Venue</dt><dd data-fill="pickup-venue"></dd></div>
+    </dl>
+    <p class="Notice"><strong>You sent more than the price.</strong> We will contact you by phone or email about the extra amount. Save this order number; we do not send a confirmation email.</p>
+  </div>
+
+  <div class="Panel" data-view="double_paid" hidden>
+    <h2 tabindex="-1">This order was paid twice</h2>
+    <p class="Big">Your shirt is paid for.</p>
+    <dl class="Facts">
+      <div data-row><dt>Order</dt><dd><span class="Ordnum" data-fill="order"></span></dd></div>
+      <div data-row><dt>Size</dt><dd data-fill="size"></dd></div>
+      <div data-row><dt>Pickup</dt><dd data-fill="pickup-date"></dd></div>
+      <div data-row><dt>Venue</dt><dd data-fill="pickup-venue"></dd></div>
+    </dl>
+    <p class="Notice"><strong>We received a second payment for this order.</strong> We will contact you by phone or email to refund it. Save this order number; we do not send a confirmation email.</p>
+  </div>
+
+  <div class="Panel Panel--muted" data-view="oversold" hidden>
+    <h2 tabindex="-1">Payment received, size sold out</h2>
+    <p class="Panel-lede">Your payment arrived after the last shirt in this size was taken.</p>
+    <dl class="Facts">
+      <div data-row><dt>Order</dt><dd><span class="Ordnum" data-fill="order"></span></dd></div>
+      <div data-row><dt>Size</dt><dd data-fill="size"></dd></div>
+    </dl>
+    <p class="Notice"><strong>We will contact you by phone or email about this order.</strong> Save this order number; we do not send a confirmation email.</p>
+  </div>
+
+  <div class="Panel Panel--muted" data-view="expired" hidden>
+    <h2 tabindex="-1">Quote expired</h2>
+    <p class="Panel-lede">The 15-minute price quote ran out before a payment arrived. Your size is no longer held.</p>
+    <dl class="Facts">
+      <div data-row><dt>Order</dt><dd><span class="Ordnum" data-fill="order"></span></dd></div>
+      <div data-row><dt>Size</dt><dd data-fill="size"></dd></div>
+    </dl>
+    <p class="Notice" data-requote-error role="alert" hidden style="margin-bottom:16px"></p>
+    <div class="Actions">
+      <button class="Contact-submit" type="button" data-requote>Get a fresh quote</button>
+    </div>
+    <p class="Merch-fine" style="margin-top:16px">A fresh quote checks stock again and shows a new sats price.</p>
+  </div>
+
+  <div class="Panel" data-view="cash" hidden>
+    <h2 tabindex="-1">Reserved, pay <span data-fill="price-usd"></span> cash at pickup</h2>
+    <p class="Panel-lede">Your shirt is held for you. Bring <span data-fill="price-usd"></span> cash to the meetup.</p>
+    <dl class="Facts">
+      <div data-row><dt>Order</dt><dd><span class="Ordnum" data-fill="order"></span></dd></div>
+      <div data-row><dt>Size</dt><dd data-fill="size"></dd></div>
+      <div data-row><dt>Pay</dt><dd><span data-fill="price-usd"></span> cash at pickup</dd></div>
+      <div data-row><dt>Pickup</dt><dd data-fill="pickup-date"></dd></div>
+      <div data-row><dt>Venue</dt><dd data-fill="pickup-venue"></dd></div>
+    </dl>
+    <p class="Notice"><strong>Save this order number.</strong> We do not send a confirmation email. We hold your shirt until this meetup ends.</p>
+  </div>
+
+  <div class="Panel" data-view="picked_up" hidden>
+    <h2 tabindex="-1">Picked up</h2>
+    <p class="Panel-lede">This order has been picked up.</p>
+    <dl class="Facts">
+      <div data-row><dt>Order</dt><dd><span class="Ordnum" data-fill="order"></span></dd></div>
+      <div data-row><dt>Size</dt><dd data-fill="size"></dd></div>
+    </dl>
+  </div>
+
+  <div class="Panel Panel--muted" data-view="checking" hidden>
+    <h2 tabindex="-1">Still checking</h2>
+    <p class="Panel-lede">We are still checking this order. Refresh this page, or <a href="/contact-us/">contact us</a> with your order number.</p>
+    <dl class="Facts">
+      <div data-row><dt>Order</dt><dd><span class="Ordnum" data-fill="order"></span></dd></div>
+      <div data-row><dt>Size</dt><dd data-fill="size"></dd></div>
+    </dl>
+  </div>
+
+  <div class="Panel Panel--muted" data-view="offline" hidden>
+    <h2 tabindex="-1">Store offline</h2>
+    <p class="Panel-lede">The shirt store is offline right now. Try again later.</p>
+    <p style="margin:0"><a href="/events/">See upcoming events</a></p>
+  </div>
+</div>
+
+<script src="/assets/js/vendor/qrcode-generator-2.0.4.js" defer></script>
+<script src="/assets/js/shirt-store.js" defer></script>
