@@ -178,6 +178,10 @@
         if (!polling) return;
         var state = r.ok && r.body && r.body.state;
         if (state) {
+          if (state === 'awaiting_payment' && (
+            (r.body.expiresAt && r.body.expiresAt !== order.expiresAt) ||
+            (r.body.invoice && r.body.invoice !== order.invoice)
+          )) return refreshOrder();
           order.state = state;
           if (r.body.expiresAt) order.expiresAt = r.body.expiresAt;
           save();

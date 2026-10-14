@@ -239,6 +239,28 @@ test('a failed poll keeps polling', async () => {
   assert.equal(s.last().view, 'paid');
 });
 
+test('a quote changed in another tab never pairs its expiry with the old invoice', async () => {
+  for (const fullQuote of [false, true]) {
+    const storage = memoryStorage();
+    const changed = { state: 'awaiting_payment', expiresAt: '2026-10-14T12:30:00Z' };
+    const s = setup({
+      ...BASE_ROUTES,
+      'POST /order': () => reply(201, LN_ORDER),
+      'GET /order/JCB-0042': () => reply(200, fullQuote
+        ? { ...changed, invoice: 'lnbc1fresh', sats: 39000 }
+        : changed),
+    }, { storage });
+    await s.shop.load();
+    await s.shop.placeOrder({ size: 'L', phone: '2015550142', email: 'a@b.co', rail: 'ln' });
+    await s.clock.advance(POLL_MS);
+    assert.equal(s.calls.filter((c) => c.path === '/order/JCB-0042').length, 2);
+    assert.equal(s.last().view, fullQuote ? 'lightning' : 'checking');
+    assert.equal(s.shop.current().invoice, fullQuote ? 'lnbc1fresh' : undefined);
+    assert.equal(JSON.parse(storage.getItem(STORAGE_KEY)).invoice, fullQuote ? 'lnbc1fresh' : undefined);
+    assert.equal(s.clock.pending(), fullQuote ? 1 : 0);
+  }
+});
+
 test('after 20 minutes without a final state it shows still checking and stops', async () => {
   let polls = 0;
   const s = setup({
