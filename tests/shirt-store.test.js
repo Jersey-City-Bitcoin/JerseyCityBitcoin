@@ -15,7 +15,9 @@ const {
   lightningUri,
   qrSvg,
   setNotice,
+  renderSizes,
   createShop,
+  mount,
 } = require('../src/assets/js/shirt-store');
 const qrcode = require('../src/assets/js/vendor/qrcode-generator-2.0.4.js');
 
@@ -113,7 +115,7 @@ const BASE_ROUTES = {
 };
 
 test('the service base URL is one constant', () => {
-  assert.equal(SHOP_URL, 'https://jinn-hp.taild4516d.ts.net/shop');
+  assert.equal(SHOP_URL, '/shop');
   assert.equal(POLL_MS, 2500);
   assert.equal(POLL_CAP_MS, 20 * 60 * 1000);
 });
@@ -620,6 +622,220 @@ test('the sold-out notice bolds its first sentence with DOM nodes', () => {
   setNotice(el, '');
   assert.deepEqual(el.children, []);
   assert.equal(el.hidden, true);
+});
+
+test('open size tiles show only the size and sold-out tiles say Sold out', () => {
+  const node = (tag) => ({
+    tag, textContent: '', children: [],
+    appendChild(child) { this.children.push(child); },
+  });
+  const box = node('div');
+  box.ownerDocument = { createElement: node };
+  const view = { querySelector: (sel) => (sel === '[data-sizes]' ? box : null) };
+  const open = renderSizes(view, { sizes: { S: 7, L: 0 } });
+  assert.equal(open, 1);
+  const face = (label) => label.children[1];
+  const [s, l] = box.children;
+  assert.deepEqual(face(s).children.map((c) => [c.tag, c.textContent]), [['b', 'S']]);
+  assert.equal(s.children[0].disabled, false);
+  assert.deepEqual(face(l).children.map((c) => [c.tag, c.textContent]), [['b', 'L'], ['small', 'Sold out']]);
+  assert.equal(l.children[0].disabled, true);
+});
+
+test('buy another forgets a finished order and shows the size picker, also after a refresh', async () => {
+  const storage = memoryStorage();
+  storage.setItem(STORAGE_KEY, JSON.stringify({ ...LN_ORDER, rail: 'ln', state: 'paid' }));
+  const s = setup({ ...BASE_ROUTES, 'GET /order/JCB-0042': () => reply(200, { state: 'paid' }) }, { storage });
+  await s.shop.load();
+  assert.equal(s.last().view, 'paid');
+  await s.shop.buyAnother();
+  assert.equal(s.last().view, 'form');
+  assert.equal(s.last().data.order, null);
+  assert.deepEqual(s.last().data.stock, STOCK);
+  assert.equal(s.shop.current(), null);
+  assert.equal(JSON.parse(storage.getItem(STORAGE_KEY)), null);
+
+  const again = setup({ ...BASE_ROUTES }, { storage });
+  await again.shop.load();
+  assert.equal(again.calls.some((c) => c.path.startsWith('/order/')), false);
+  assert.equal(again.last().view, 'form');
+});
+
+test('buy another ignores a late quote, including after placing a new cash order', async () => {
+  for (const replace of [false, true]) {
+    const storage = memoryStorage();
+    storage.setItem(STORAGE_KEY, JSON.stringify({ ...LN_ORDER, rail: 'ln', state: 'expired' }));
+    let finish;
+    const pending = new Promise((resolve) => { finish = resolve; });
+    const s = setup({
+      ...BASE_ROUTES,
+      'GET /order/JCB-0042': () => reply(200, { state: 'expired' }),
+      'POST /order/JCB-0042/requote': () => pending,
+      'POST /order': () => reply(201, CASH_ORDER),
+    }, { storage });
+    await s.shop.load();
+    const requote = s.shop.requote();
+    await s.shop.buyAnother();
+    if (replace) await s.shop.placeOrder({ size: 'L', phone: '2015550142', email: 'a@b.co', rail: 'cash' });
+    const before = JSON.parse(storage.getItem(STORAGE_KEY));
+    finish(await reply(200, { ...LN_ORDER, invoice: 'lnbc1new', sats: 39000 }));
+    await requote;
+    assert.equal(s.last().view, replace ? 'cash' : 'form');
+    assert.deepEqual(JSON.parse(JSON.stringify(s.shop.current())), before);
+    assert.deepEqual(JSON.parse(storage.getItem(STORAGE_KEY)), before);
+    assert.equal(s.clock.pending(), 0);
+  }
+});
+
+test('late quote errors do not check or change a replacement order', async () => {
+  for (const answer of [
+    () => reply(409, { error: 'not_expired' }),
+    () => reply(409, { error: 'sold_out' }),
+    () => reply(503, { error: 'offline' }),
+    () => Promise.reject(new TypeError('Failed to fetch')),
+  ]) {
+    const storage = memoryStorage();
+    storage.setItem(STORAGE_KEY, JSON.stringify({ ...LN_ORDER, rail: 'ln', state: 'expired' }));
+    let finish;
+    const pending = new Promise((resolve) => { finish = resolve; });
+    const s = setup({
+      ...BASE_ROUTES,
+      'GET /order/JCB-0042': () => reply(200, { state: 'expired' }),
+      'POST /order/JCB-0042/requote': () => pending,
+      'POST /order': () => reply(201, CASH_ORDER),
+    }, { storage });
+    await s.shop.load();
+    const requote = s.shop.requote();
+    await s.shop.buyAnother();
+    await s.shop.placeOrder({ size: 'L', phone: '2015550142', email: 'a@b.co', rail: 'cash' });
+    const before = JSON.parse(storage.getItem(STORAGE_KEY));
+    const calls = s.calls.length;
+    finish(answer());
+    await requote;
+    assert.equal(s.last().view, 'cash');
+    assert.deepEqual(JSON.parse(JSON.stringify(s.shop.current())), before);
+    assert.deepEqual(JSON.parse(storage.getItem(STORAGE_KEY)), before);
+    assert.equal(s.calls.length, calls);
+  }
+});
+
+test('buy another ignores an old quote recovery already checking the service', async () => {
+  for (const answer of [
+    () => reply(200, { ...LN_ORDER, invoice: 'lnbc1new', sats: 39000 }),
+    () => reply(404, { error: 'not_found' }),
+    () => Promise.reject(new TypeError('Failed to fetch')),
+  ]) {
+    const storage = memoryStorage();
+    storage.setItem(STORAGE_KEY, JSON.stringify({ ...LN_ORDER, rail: 'ln', state: 'expired' }));
+    let checks = 0;
+    let finish;
+    const pending = new Promise((resolve) => { finish = resolve; });
+    const s = setup({
+      ...BASE_ROUTES,
+      'GET /order/JCB-0042': () => ++checks === 1 ? reply(200, { state: 'expired' }) : pending,
+      'POST /order/JCB-0042/requote': () => reply(409, { error: 'not_expired' }),
+      'POST /order': () => reply(201, CASH_ORDER),
+    }, { storage });
+    await s.shop.load();
+    const requote = s.shop.requote();
+    await flush();
+    assert.equal(checks, 2);
+    await s.shop.buyAnother();
+    await s.shop.placeOrder({ size: 'L', phone: '2015550142', email: 'a@b.co', rail: 'cash' });
+    const before = JSON.parse(storage.getItem(STORAGE_KEY));
+    const calls = s.calls.length;
+    finish(answer());
+    await requote;
+    assert.equal(s.last().view, 'cash');
+    assert.deepEqual(JSON.parse(JSON.stringify(s.shop.current())), before);
+    assert.deepEqual(JSON.parse(storage.getItem(STORAGE_KEY)), before);
+    assert.equal(s.clock.pending(), 0);
+    assert.equal(s.calls.length, calls);
+  }
+});
+
+test('resetting an order stops polling and ignores its in-flight status check', async () => {
+  for (const answer of [
+    () => reply(200, { state: 'paid' }),
+    () => Promise.reject(new TypeError('Failed to fetch')),
+  ]) {
+    let orders = 0;
+    let finish;
+    const pending = new Promise((resolve) => { finish = resolve; });
+    const s = setup({
+      ...BASE_ROUTES,
+      'POST /order': () => reply(201, { ...LN_ORDER, order: ++orders === 1 ? 'JCB-0042' : 'JCB-0044' }),
+      'GET /order/JCB-0042': () => pending,
+    });
+    await s.shop.load();
+    await s.shop.placeOrder({ size: 'L', phone: '2015550142', email: 'a@b.co', rail: 'ln' });
+    await s.clock.advance(POLL_MS);
+    await s.shop.buyAnother();
+    assert.equal(s.shop.isPolling(), false);
+    assert.equal(s.clock.pending(), 0);
+    await s.shop.placeOrder({ size: 'L', phone: '2015550142', email: 'a@b.co', rail: 'ln' });
+    finish(answer());
+    await flush();
+    assert.equal(s.last().view, 'lightning');
+    assert.equal(s.shop.current().order, 'JCB-0044');
+    assert.equal(s.shop.current().state, 'awaiting_payment');
+    assert.equal(s.clock.pending(), 1);
+  }
+});
+
+test('quote and buy-another buttons stay mutually disabled until either action finishes', async () => {
+  const button = (disabled = false) => ({
+    disabled, listeners: {},
+    addEventListener(event, fn) { this.listeners[event] = fn; },
+  });
+  const again = button();
+  const another = button();
+  const unavailable = button(true);
+  const form = button();
+  const copy = button();
+  const buttons = [again, another, unavailable];
+  const container = {
+    querySelector: (sel) => ({ '[data-order-form]': form, '[data-copy]': copy, '[data-requote]': again })[sel],
+    querySelectorAll: (sel) => sel === '[data-view]' ? [] : sel === '[data-buy-another]' ? [another, unavailable] : buttons,
+  };
+  const storage = memoryStorage();
+  storage.setItem(STORAGE_KEY, JSON.stringify({ ...LN_ORDER, rail: 'ln', state: 'expired' }));
+  let finish;
+  let pending;
+  const win = {
+    sessionStorage: storage, setTimeout, clearTimeout,
+    fetch: (url) => url.endsWith('/requote') || url.endsWith('/health') ? pending
+      : reply(200, url.endsWith('/stock') ? STOCK : { state: 'expired' }),
+  };
+  mount(container, win);
+  await flush();
+  pending = new Promise((resolve) => { finish = resolve; });
+  again.listeners.click();
+  assert.deepEqual(buttons.map((b) => b.disabled), [true, true, true]);
+  finish(await reply(409, { error: 'sold_out' }));
+  await flush();
+  assert.deepEqual(buttons.map((b) => b.disabled), [false, false, true]);
+  pending = new Promise((resolve) => { finish = resolve; });
+  another.listeners.click();
+  assert.deepEqual(buttons.map((b) => b.disabled), [true, true, true]);
+  finish(await reply(200, 'ok'));
+  await flush();
+  assert.deepEqual(buttons.map((b) => b.disabled), [false, false, true]);
+});
+
+test('every final view has a Buy another shirt button', () => {
+  const html = fs.readFileSync(path.join(__dirname, '../src/pages/shirt.html'), 'utf8');
+  const finals = new Set(['paid', 'overpaid', 'double_paid', 'oversold', 'expired', 'unpaid_cash', 'paid_cash', 'picked_up']
+    .filter(isFinalState).map(viewForState));
+  assert.deepEqual([...finals].sort(), ['cash', 'double_paid', 'expired', 'overpaid', 'oversold', 'paid', 'picked_up']);
+  for (const view of finals) {
+    const block = html.split(`data-view="${view}"`)[1].split('data-view=')[0];
+    assert.match(block, /<button class="Contact-submit Contact-submit--ghost" type="button" data-buy-another>Buy another shirt<\/button>/, view);
+  }
+  for (const view of ['form', 'lightning', 'checking', 'offline']) {
+    const block = html.split(`data-view="${view}"`)[1].split('data-view=')[0];
+    assert.doesNotMatch(block, /data-buy-another/, view);
+  }
 });
 
 test('the overpaid and paid-twice views show no sats amount', () => {

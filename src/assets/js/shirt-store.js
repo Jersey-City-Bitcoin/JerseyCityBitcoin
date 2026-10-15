@@ -12,7 +12,7 @@
 })(typeof window !== 'undefined' ? window : null, function () {
   'use strict';
 
-  var SHOP_URL = 'https://jinn-hp.taild4516d.ts.net/shop';
+  var SHOP_URL = '/shop';
   var POLL_MS = 2500;
   var POLL_CAP_MS = 20 * 60 * 1000;
   var STORAGE_KEY = 'jcb-shirt-order';
@@ -173,9 +173,10 @@
         show('checking');
         return;
       }
+      var requestedOrder = order;
       var path = '/order/' + encodeURIComponent(order.order) + '?t=' + encodeURIComponent(order.token);
       request(path).then(function (r) {
-        if (!polling) return;
+        if (!polling || order !== requestedOrder) return;
         var state = r.ok && r.body && r.body.state;
         if (state) {
           if (state === 'awaiting_payment' && (
@@ -193,7 +194,7 @@
         }
         schedule();
       }, function () {
-        if (polling) schedule();
+        if (polling && order === requestedOrder) schedule();
       });
     }
 
@@ -217,15 +218,19 @@
     }
 
     function forgetOrder() {
+      stopPolling();
       order = null;
       save();
     }
 
     function refreshOrder() {
+      if (!order) return Promise.resolve();
+      var requestedOrder = order;
       stopPolling();
       show('checking');
       var path = '/order/' + encodeURIComponent(order.order) + '?t=' + encodeURIComponent(order.token);
       return request(path).then(function (r) {
+        if (order !== requestedOrder) return;
         var b = r.body;
         if (r.status === 404 && b && b.error === 'not_found') {
           forgetOrder();
@@ -253,7 +258,7 @@
           return startLightning();
         }
         return show(viewForState(order.state));
-      }, function () { show('checking'); });
+      }, function () { if (order === requestedOrder) show('checking'); });
     }
 
     function load() {
@@ -301,8 +306,10 @@
 
     function requote() {
       if (!order) return Promise.resolve();
+      var requestedOrder = order;
       var path = '/order/' + encodeURIComponent(order.order) + '/requote';
       return postJson(path, { t: order.token }).then(function (r) {
+        if (order !== requestedOrder) return;
         var b = r.body;
         if (r.ok && b && b.invoice) {
           order.state = b.state;
@@ -316,13 +323,17 @@
         if (b && b.error === 'not_expired') return refreshOrder();
         if (isOfflineAnswer(r)) return refreshOrder();
         return show('expired', b.error, order.size);
-      }, refreshOrder);
+      }, function () { if (order === requestedOrder) return refreshOrder(); });
     }
 
     return {
       load: load,
       placeOrder: placeOrder,
       requote: requote,
+      buyAnother: function () {
+        forgetOrder();
+        return loadStore();
+      },
       stop: stopPolling,
       current: function () { return order; },
       isPolling: function () { return polling; },
@@ -383,7 +394,6 @@
       var input = doc.createElement('input');
       var face = doc.createElement('span');
       var name = doc.createElement('b');
-      var note = doc.createElement('small');
       label.className = left > 0 ? 'Size' : 'Size Size--out';
       input.type = 'radio';
       input.name = 'size';
@@ -392,9 +402,12 @@
       input.disabled = left < 1;
       input.checked = left > 0 && size === keep;
       name.textContent = size;
-      note.textContent = left > 0 ? left + ' left' : 'Sold out';
       face.appendChild(name);
-      face.appendChild(note);
+      if (left < 1) {
+        var note = doc.createElement('small');
+        note.textContent = 'Sold out';
+        face.appendChild(note);
+      }
       label.appendChild(input);
       label.appendChild(face);
       box.appendChild(label);
@@ -510,11 +523,23 @@
       });
     });
 
+    var orderActions = Array.prototype.slice.call(container.querySelectorAll('[data-requote], [data-buy-another]'));
+    function runOrderAction(action) {
+      var enabled = orderActions.filter(function (button) { return !button.disabled; });
+      enabled.forEach(function (button) { button.disabled = true; });
+      var done = function () {
+        enabled.forEach(function (button) { button.disabled = false; });
+      };
+      action().then(done, done);
+    }
+
     var again = container.querySelector('[data-requote]');
-    again.addEventListener('click', function () {
-      var done = function () { again.disabled = false; };
-      again.disabled = true;
-      shop.requote().then(done, done);
+    again.addEventListener('click', function () { runOrderAction(shop.requote); });
+
+    container.querySelectorAll('[data-buy-another]').forEach(function (button) {
+      button.addEventListener('click', function () {
+        runOrderAction(shop.buyAnother);
+      });
     });
 
     shop.load();
@@ -535,6 +560,7 @@
     lightningUri: lightningUri,
     qrSvg: qrSvg,
     setNotice: setNotice,
+    renderSizes: renderSizes,
     createShop: createShop,
     mount: mount,
   };
