@@ -16,6 +16,7 @@ eleventyNavigation:
 .Merch h2 { font-family: 'Oswald', system-ui, sans-serif; text-transform: uppercase; letter-spacing: 1px; }
 .Merch-fine { color: #a08862; font-size: .8rem; margin-top: 32px; }
 .Shop { max-width: 560px; margin-top: 36px; }
+.Shop-photo { display: block; width: 100%; height: auto; border: 1px solid #2a2520; margin: 0 0 24px; }
 .Shop-loading { color: #a08862; font-family: 'JetBrains Mono', monospace; font-size: .85rem; margin-top: 36px; }
 .Shop-price { font-family: 'Oswald', system-ui, sans-serif; font-size: 2.2rem; font-weight: 700; color: #ff9900; line-height: 1; margin: 0 0 6px; }
 .Shop-sub { color: #cfc7b8; font-size: .95rem; margin: 0 0 24px; }
@@ -103,6 +104,7 @@ eleventyNavigation:
   </div>
 
   <div class="Shop" data-view="form" hidden>
+    <img class="Shop-photo" src="/assets/images/jc-bitcoin-shirt.jpg" width="1280" height="960" alt="The JC Bitcoin shirt, front and back. Front: '> Jersey City Bitcoin_' in orange on the chest. Back: a glitched Bitcoin symbol under 'Be your own bank_'." decoding="async">
     <p class="Shop-price" data-fill="price-usd"></p>
     <p class="Shop-sub">Made to order. Pick it up at a Jersey City Bitcoin meetup. No shipping.</p>
     <form class="Contact-form Shop-form" data-order-form>
