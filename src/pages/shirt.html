@@ -4,6 +4,9 @@ description: 'The JC Bitcoin shirt, made to order. Order online and pick it up a
 metaTitle: 'The JC Bitcoin Shirt'
 title: Shirt
 permalink: 'shirt/'
+eleventyNavigation:
+    key: Shop
+    order: 425
 ---
 <style>
 .Merch { max-width: 1100px; margin: 0 auto; padding: 48px 24px 88px; }
@@ -23,9 +26,9 @@ permalink: 'shirt/'
 .Shop-explain a { color: #ff9900; }
 .Sizes { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px; }
 @media (max-width: 400px) { .Sizes { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
-.Size { position: relative; display: block; }
+.Size { position: relative; display: flex; }
 .Shop-form .Size input { position: absolute; opacity: 0; pointer-events: none; width: 1px; height: 1px; min-height: 0; padding: 0; }
-.Size span { display: block; background: #1a1810; border: 1px solid #2a2520; padding: 10px 4px 8px; text-align: center; cursor: pointer; }
+.Size span { flex: 1; display: flex; flex-direction: column; justify-content: center; background: #1a1810; border: 1px solid #2a2520; padding: 10px 4px 8px; text-align: center; cursor: pointer; }
 .Size b { display: block; font-family: 'Oswald', system-ui, sans-serif; font-size: 1.1rem; font-weight: 600; letter-spacing: 1px; color: #f5f0e6; }
 .Size small { display: block; font-family: 'JetBrains Mono', monospace; font-size: .68rem; color: #a08862; letter-spacing: .5px; margin-top: 2px; }
 .Size input:checked + span { border: 2px solid #ff9900; padding: 9px 3px 7px; }
@@ -67,6 +70,7 @@ permalink: 'shirt/'
 .Actions { display: grid; gap: 10px; }
 .Actions .Contact-submit { display: block; text-align: center; width: 100%; text-decoration: none; }
 .Actions a.Contact-submit { color: #13120e; }
+.Panel-again { margin-top: 20px; }
 .Invoice { font-family: 'JetBrains Mono', monospace; font-size: .72rem; color: #a08862; word-break: break-all; background: #13120e; border: 1px solid #2a2520; padding: 10px 12px; margin: 14px 0 0; }
 .Status { display: flex; align-items: center; gap: 10px; margin-top: 18px; color: #cfc7b8; font-size: .9rem; }
 .Status-dot { width: 10px; height: 10px; border-radius: 50%; background: #a08862; flex: none; }
@@ -161,6 +165,9 @@ permalink: 'shirt/'
       <div data-row><dt>Venue</dt><dd data-fill="pickup-venue"></dd></div>
     </dl>
     <p class="Notice"><strong>Save this order number.</strong> We do not send a confirmation email. Show the number at the meetup to collect your shirt.</p>
+    <div class="Actions Panel-again">
+      <button class="Contact-submit Contact-submit--ghost" type="button" data-buy-another>Buy another shirt</button>
+    </div>
   </div>
 
   <div class="Panel" data-view="overpaid" hidden>
@@ -173,6 +180,9 @@ permalink: 'shirt/'
       <div data-row><dt>Venue</dt><dd data-fill="pickup-venue"></dd></div>
     </dl>
     <p class="Notice"><strong>You sent more than the price.</strong> We will contact you by phone or email about the extra amount. Save this order number; we do not send a confirmation email.</p>
+    <div class="Actions Panel-again">
+      <button class="Contact-submit Contact-submit--ghost" type="button" data-buy-another>Buy another shirt</button>
+    </div>
   </div>
 
   <div class="Panel" data-view="double_paid" hidden>
@@ -185,6 +195,9 @@ permalink: 'shirt/'
       <div data-row><dt>Venue</dt><dd data-fill="pickup-venue"></dd></div>
     </dl>
     <p class="Notice"><strong>We received a second payment for this order.</strong> We will contact you by phone or email to refund it. Save this order number; we do not send a confirmation email.</p>
+    <div class="Actions Panel-again">
+      <button class="Contact-submit Contact-submit--ghost" type="button" data-buy-another>Buy another shirt</button>
+    </div>
   </div>
 
   <div class="Panel Panel--muted" data-view="oversold" hidden>
@@ -195,6 +208,9 @@ permalink: 'shirt/'
       <div data-row><dt>Size</dt><dd data-fill="size"></dd></div>
     </dl>
     <p class="Notice"><strong>We will contact you by phone or email about this order.</strong> Save this order number; we do not send a confirmation email.</p>
+    <div class="Actions Panel-again">
+      <button class="Contact-submit Contact-submit--ghost" type="button" data-buy-another>Buy another shirt</button>
+    </div>
   </div>
 
   <div class="Panel Panel--muted" data-view="expired" hidden>
@@ -207,6 +223,7 @@ permalink: 'shirt/'
     <p class="Notice" data-requote-error role="alert" hidden style="margin-bottom:16px"></p>
     <div class="Actions">
       <button class="Contact-submit" type="button" data-requote>Get a fresh quote</button>
+      <button class="Contact-submit Contact-submit--ghost" type="button" data-buy-another>Buy another shirt</button>
     </div>
     <p class="Merch-fine" style="margin-top:16px">A fresh quote checks stock again and shows a new sats price.</p>
   </div>
@@ -222,6 +239,9 @@ permalink: 'shirt/'
       <div data-row><dt>Venue</dt><dd data-fill="pickup-venue"></dd></div>
     </dl>
     <p class="Notice"><strong>Save this order number.</strong> We do not send a confirmation email. We hold your shirt until this meetup ends.</p>
+    <div class="Actions Panel-again">
+      <button class="Contact-submit Contact-submit--ghost" type="button" data-buy-another>Buy another shirt</button>
+    </div>
   </div>
 
   <div class="Panel" data-view="picked_up" hidden>
@@ -231,6 +251,9 @@ permalink: 'shirt/'
       <div data-row><dt>Order</dt><dd><span class="Ordnum" data-fill="order"></span></dd></div>
       <div data-row><dt>Size</dt><dd data-fill="size"></dd></div>
     </dl>
+    <div class="Actions Panel-again">
+      <button class="Contact-submit Contact-submit--ghost" type="button" data-buy-another>Buy another shirt</button>
+    </div>
   </div>
 
   <div class="Panel Panel--muted" data-view="checking" hidden>

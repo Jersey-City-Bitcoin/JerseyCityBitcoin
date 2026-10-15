@@ -114,7 +114,7 @@ const BASE_ROUTES = {
 };
 
 test('the service base URL is one constant', () => {
-  assert.equal(SHOP_URL, 'https://jinn-hp.taild4516d.ts.net/shop');
+  assert.equal(SHOP_URL, '/shop');
   assert.equal(POLL_MS, 2500);
   assert.equal(POLL_CAP_MS, 20 * 60 * 1000);
 });
@@ -623,7 +623,7 @@ test('the sold-out notice bolds its first sentence with DOM nodes', () => {
   assert.equal(el.hidden, true);
 });
 
-test('size tiles say Available or Sold out and never show a count', () => {
+test('open size tiles show only the size and sold-out tiles say Sold out', () => {
   const node = (tag) => ({
     tag, textContent: '', children: [],
     appendChild(child) { this.children.push(child); },
@@ -633,12 +633,46 @@ test('size tiles say Available or Sold out and never show a count', () => {
   const view = { querySelector: (sel) => (sel === '[data-sizes]' ? box : null) };
   const open = renderSizes(view, { sizes: { S: 7, L: 0 } });
   assert.equal(open, 1);
-  const note = (label) => label.children[1].children[1].textContent;
+  const face = (label) => label.children[1];
   const [s, l] = box.children;
-  assert.equal(note(s), 'Available');
-  assert.doesNotMatch(note(s), /7/);
-  assert.equal(note(l), 'Sold out');
+  assert.deepEqual(face(s).children.map((c) => [c.tag, c.textContent]), [['b', 'S']]);
+  assert.equal(s.children[0].disabled, false);
+  assert.deepEqual(face(l).children.map((c) => [c.tag, c.textContent]), [['b', 'L'], ['small', 'Sold out']]);
   assert.equal(l.children[0].disabled, true);
+});
+
+test('buy another forgets a finished order and shows the size picker, also after a refresh', async () => {
+  const storage = memoryStorage();
+  storage.setItem(STORAGE_KEY, JSON.stringify({ ...LN_ORDER, rail: 'ln', state: 'paid' }));
+  const s = setup({ ...BASE_ROUTES, 'GET /order/JCB-0042': () => reply(200, { state: 'paid' }) }, { storage });
+  await s.shop.load();
+  assert.equal(s.last().view, 'paid');
+  await s.shop.buyAnother();
+  assert.equal(s.last().view, 'form');
+  assert.equal(s.last().data.order, null);
+  assert.deepEqual(s.last().data.stock, STOCK);
+  assert.equal(s.shop.current(), null);
+  assert.equal(JSON.parse(storage.getItem(STORAGE_KEY)), null);
+
+  const again = setup({ ...BASE_ROUTES }, { storage });
+  await again.shop.load();
+  assert.equal(again.calls.some((c) => c.path.startsWith('/order/')), false);
+  assert.equal(again.last().view, 'form');
+});
+
+test('every final view has a Buy another shirt button', () => {
+  const html = fs.readFileSync(path.join(__dirname, '../src/pages/shirt.html'), 'utf8');
+  const finals = new Set(['paid', 'overpaid', 'double_paid', 'oversold', 'expired', 'unpaid_cash', 'paid_cash', 'picked_up']
+    .filter(isFinalState).map(viewForState));
+  assert.deepEqual([...finals].sort(), ['cash', 'double_paid', 'expired', 'overpaid', 'oversold', 'paid', 'picked_up']);
+  for (const view of finals) {
+    const block = html.split(`data-view="${view}"`)[1].split('data-view=')[0];
+    assert.match(block, /<button class="Contact-submit Contact-submit--ghost" type="button" data-buy-another>Buy another shirt<\/button>/, view);
+  }
+  for (const view of ['form', 'lightning', 'checking', 'offline']) {
+    const block = html.split(`data-view="${view}"`)[1].split('data-view=')[0];
+    assert.doesNotMatch(block, /data-buy-another/, view);
+  }
 });
 
 test('the overpaid and paid-twice views show no sats amount', () => {
